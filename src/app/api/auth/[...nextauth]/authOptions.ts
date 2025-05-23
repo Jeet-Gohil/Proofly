@@ -14,7 +14,7 @@ interface ExtendedUser extends User {
   image?: string;
 }
 
-export const authOptions: NextAuthOptions = {
+export const authOptions = {
   session: { strategy: "jwt" },
   providers: [
     CredentialsProvider({
