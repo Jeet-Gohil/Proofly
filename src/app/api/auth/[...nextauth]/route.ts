@@ -3,9 +3,9 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcrypt";
 import pool from "@/app/lib/db";
-import { NextAuthOptions, User } from "next-auth";
+// Import types only for type-checking, don't export them from route.ts
+import type { NextAuthOptions, User } from "next-auth";
 
-// Optional: Extend the default User type
 interface ExtendedUser extends User {
   id: string;
   name: string;
@@ -14,7 +14,7 @@ interface ExtendedUser extends User {
   image?: string;
 }
 
-const authOptions: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
@@ -109,6 +109,6 @@ const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET || 'secret',
 };
 
-// ✅ Export only the route handlers
 const handler = NextAuth(authOptions);
+
 export { handler as GET, handler as POST };
