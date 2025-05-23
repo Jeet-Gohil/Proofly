@@ -17,6 +17,7 @@ const eslintConfig = [
     files: ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
     rules: {
       "react/no-unescaped-entities": "off", // turn off the rule
+      '@next/next/no-page-custom-font': 'off',
     },
   },
 ];

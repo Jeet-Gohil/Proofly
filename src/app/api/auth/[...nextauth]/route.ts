@@ -1,11 +1,11 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import { User } from "next-auth";
 import bcrypt from "bcrypt";
 import pool from "@/app/lib/db";
+import { NextAuthOptions, User } from "next-auth";
 
-
+// Optional: Extend the default User type
 interface ExtendedUser extends User {
   id: string;
   name: string;
@@ -14,22 +14,18 @@ interface ExtendedUser extends User {
   image?: string;
 }
 
-
-
-// Define your NextAuth config with full typing
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
   providers: [
-    // Credentials Provider
     CredentialsProvider({
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials, req): Promise<ExtendedUser | null> {
+      async authorize(credentials): Promise<ExtendedUser | null> {
         const { email, password } = credentials as {
           email: string;
           password: string;
@@ -54,7 +50,6 @@ export const authOptions: NextAuthOptions = {
       },
     }),
 
-    // Google Provider with prompt
     GoogleProvider({
       clientId: process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string,
       clientSecret: process.env.NEXT_PUBLIC_GOOGLE_SECRET_KEY as string,
@@ -69,35 +64,27 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
-    // Customize JWT token
-    async jwt({token, account, profile}) {
-      if (account &&  profile?.email) {
+    async jwt({ token, account, profile }) {
+      if (account && profile?.email) {
         try {
-          const data = await pool.query('SELECT * FROM users where email = $1', [profile.email]);
-          let userID ;
-           if (data.rows.length > 0) {
-            userID = data.rows[0].id;
-           }
-           token.id = userID;
-        }
-        catch(err) {
-
+          const data = await pool.query('SELECT * FROM users WHERE email = $1', [profile.email]);
+          if (data.rows.length > 0) {
+            token.id = data.rows[0].id;
+          }
+        } catch (err) {
+          console.error("JWT callback error:", err);
         }
       }
       return token;
-    }
+    },
 
-    // Add user data to session
-    ,
-    async session ({session, token}) {
+    async session({ session, token }) {
       if (token?.id) {
         session.user.id = token.id as string;
       }
       return session;
-    }
-    ,
+    },
 
-    // Handle sign-in logic
     async signIn({ user, account }) {
       if (account?.provider === "google") {
         const existing = await pool.query(
@@ -113,13 +100,15 @@ export const authOptions: NextAuthOptions = {
       }
       return true;
     },
+
     async redirect() {
       return `http://localhost:3000/redirecting`;
     },
   },
 
-  secret: 'secret',
+  secret: process.env.NEXTAUTH_SECRET || 'secret',
 };
 
+// ✅ Export only the route handlers
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
