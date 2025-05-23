@@ -2,7 +2,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcrypt";
 import pool from "@/app/lib/db";
-import { type NextAuthOptions } from "next-auth";
+
 import { type User } from "next-auth";
 
 
