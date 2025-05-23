@@ -1,11 +1,10 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import { JWT } from "next-auth/jwt";
-import { Session, User } from "next-auth";
+import { User } from "next-auth";
 import bcrypt from "bcrypt";
 import pool from "@/app/lib/db";
-import { NextResponse } from "next/server";
+
 
 interface ExtendedUser extends User {
   id: string;
@@ -114,7 +113,7 @@ export const authOptions: NextAuthOptions = {
       }
       return true;
     },
-    async redirect({ baseUrl, url }) {
+    async redirect() {
       return `http://localhost:3000/redirecting`;
     },
   },

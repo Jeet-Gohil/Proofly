@@ -1,6 +1,6 @@
 import { SidebarDemo } from "@/app/components/ui/SideBar";
 
-export default function() {
+export default function DashboardPage() {
   return (
     <div className="mt-4 mb-4">
     <SidebarDemo/>

@@ -1,6 +1,4 @@
 'use client'
-import { DashBoardHead } from '@/app/components/DashBoardHead'
-import { SideBar } from '@/app/components/SideBar'
 import React, { useState } from 'react'
 import LoginSuccessPopup from '@/app/components/LoginSuccessPopup'
 
@@ -66,12 +64,12 @@ export default function page() {
   return (
     <div className="flex h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 text-gray-900 overflow-hidden">
   {/* Sidebar */}
-  <SideBar />
+  
 
   {/* Main Dashboard Content */}
   <div className="flex-1 flex flex-col overflow-y-auto">
     {/* Dashboard Header */}
-    <DashBoardHead />
+
 
     {/* Main Content Area */}
     <main className="flex-1 p-6 sm:p-10 overflow-y-auto">

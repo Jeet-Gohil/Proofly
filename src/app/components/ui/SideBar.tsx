@@ -31,7 +31,7 @@ export function SidebarDemo() {
     });
   }, []);
   
-  
+  console.log(data);
   
   const links = [
     {
@@ -42,8 +42,8 @@ export function SidebarDemo() {
       ),
     },
     {
-      label: "Profile",
-      href: "#",
+      label: "Sites",
+      href: "/dashboard/${user}/sites",
       icon: (
         <IconUserBolt className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
       ),

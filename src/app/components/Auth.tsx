@@ -4,7 +4,7 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 
 const Auth = () => {
-    const [show, setShow] = useState(false);
+    
     const [email, setEmail] = useState("gjeet084@gmail.com");
     const [password, setPassword] = useState("");
     
@@ -92,7 +92,6 @@ const Auth = () => {
                 </div>
 
                 <button 
-                    onClick={() => setShow(false)} 
                     className="mt-4 text-sm text-gray-500 hover:underline w-full text-center"
                 >
                     Close

@@ -1,5 +1,5 @@
 import PricingSection from "../components/PricingScheme"
-import Pricing from "../components/PricingScheme"
+
 
 export default function pricing() {
     return (
