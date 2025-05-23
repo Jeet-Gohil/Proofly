@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import { Providers } from "./providers";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
-
-import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import Navbar from "./components/Navbar";
 
 
 
@@ -21,11 +20,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Providers>
+        <ClerkProvider>
           <Navbar/>
         {children}
         <Footer/>
-        </Providers>
+        </ClerkProvider>
+        
       </body>
     </html>
   );

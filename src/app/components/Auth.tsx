@@ -1,14 +1,14 @@
 'use client'
 import React from 'react'
-import { signIn } from "next-auth/react";
+import { SignIn } from '@clerk/nextjs';
 import { useState } from "react";
 
-const googleLogin = async()=> {
-    await signIn("Google", {
-        callbackUrl : "/dashboard/${user}",
-        redirect: true
-    });
-}
+// const googleLogin = async()=> {
+//     await signIn("Google", {
+//         callbackUrl : "/dashboard/${user}",
+//         redirect: true
+//     });
+// }
 
 const Auth = () => {
     
@@ -23,13 +23,14 @@ const Auth = () => {
                 </h1>
 
                 <div className="space-y-6">
-                    <button
+                    <SignIn/>
+                    {/* <button
                         onClick= {googleLogin}
                         type="button"
                         className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                     >
                         Continue with Google
-                    </button>
+                    </button> */}
 
                     <div className="relative">
                         <div className="absolute inset-0 flex items-center">
@@ -75,7 +76,7 @@ const Auth = () => {
 
                         <div>
                             <button
-                                onClick={() => signIn("credentials", { email, password, redirect: false })}
+                                // onClick={() => signIn("credentials", { email, password, redirect: false })}
                                 type="button"
                                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                             >
