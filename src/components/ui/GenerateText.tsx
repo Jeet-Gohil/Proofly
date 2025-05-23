@@ -5,6 +5,7 @@ import { motion, stagger, useAnimate } from "motion/react";
 
 export const TextGenerateEffect = ({
   words,
+
   filter = true,
   duration = 0.5,
 }: {
