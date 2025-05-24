@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
-
+import { TextGenerateEffectDemo } from "./ui/GenerateText";
 
 const ProofSignup = () => {
   const route = useRouter();
@@ -18,8 +18,7 @@ const ProofSignup = () => {
       </div>
 
       <h1 className="text-3xl font-bold leading-snug">
-        Boost your website conversions by 15% in <br />
-        <span className="text-white">under 15 minutes</span>
+        <TextGenerateEffectDemo/>
       </h1>
 
       <p className="text-gray-400 text-base">
