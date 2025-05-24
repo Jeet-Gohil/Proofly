@@ -1,4 +1,5 @@
 'use client'
+import Link from 'next/link'
 import React from 'react'
 
 const Footer = () => {
@@ -21,9 +22,9 @@ const Footer = () => {
       <div>
         <h4 className="text-white font-semibold mb-3">Products</h4>
         <ul className="space-y-2 text-white/70 text-sm">
-          <li>Proof Pulse</li>
-          <li>Pricing</li>
-          <li>Customer reviews</li>
+          <li><Link href = {"/"}>Proofly</Link></li>
+          <li><Link href = {"/pricing"}>Pricing</Link></li>
+          <li><Link href = {"/reviews"}>Reviews</Link></li>
         </ul>
       </div>
 
@@ -44,7 +45,7 @@ const Footer = () => {
         <h4 className="text-white font-semibold mb-3">Support</h4>
         <ul className="space-y-2 text-white/70 text-sm">
           <li>FAQ & Support Center</li>
-          <li className="text-blue-400">team@useproof.com</li>
+          <li className="text-blue-400">gjeet7415@gmail.com</li>
         </ul>
       </div>
 
@@ -84,7 +85,7 @@ const Footer = () => {
       <a href="#">Privacy</a>
       <a href="#">Terms</a>
       <span className="text-white font-semibold">
-        © 2021 Proof Technologies, Inc.
+        © 2025 Proofly Technologies, Inc.
       </span>
     </div>
   </div>

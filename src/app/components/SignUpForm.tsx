@@ -1,6 +1,13 @@
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 const SignupForm: React.FC = () => {
+  const route = useRouter();
+
+  const OnClick = ()=> {
+    route.push('/dashboard/${user}/sites');
+  }
+
   return (
     <div className='box w-full flex justify-center'>
     {/* Left Section */}
@@ -9,15 +16,7 @@ const SignupForm: React.FC = () => {
     {/* Right Section */}
     <div className="w-full md:w-1/2 px-6 sm:px-12 lg:px-20 py-16 flex flex-col justify-center relative z-10">
       {/* Step Progress */}
-      <div className="mb-6">
-        <div className="flex justify-between mb-2 text-sm font-semibold text-gray-600">
-          <span>Step 1</span>
-          <span>25%</span>
-        </div>
-        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-          <div className="h-2 w-1/4 bg-blue-600 rounded-full transition-all duration-300 ease-in-out"></div>
-        </div>
-      </div>
+      
 
       {/* Title & Description */}
       <h2 className="text-3xl font-extrabold leading-tight mb-2 text-gray-900">Get started for free</h2>
@@ -53,6 +52,7 @@ const SignupForm: React.FC = () => {
         </div>
 
         <button
+        onClick={OnClick}
           type="submit"
           className="w-full bg-blue-600 text-white py-3 rounded-md font-bold shadow-lg hover:bg-blue-700 transition duration-300"
         >

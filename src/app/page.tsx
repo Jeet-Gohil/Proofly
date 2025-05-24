@@ -3,6 +3,7 @@ import Link from "next/link";
 import { DraggableCardDemo } from "./components/ui/DraggableCards";
 import { SVGMaskEffectDemo } from "./components/ui/Mask-Effect";
 import React from "react";
+import ProofSignup from "./components/PhoneHeroSection";
 
 const title = 'Boost your website conversions by 15% in under 15 minutes';
 const title1 = `We believe customer-obsessed marketing is the best kind of marketing. Proof makes it easy. Make your website delightfully human.`;
@@ -46,10 +47,7 @@ export default function Home() {
         </div>
 
         {/* Mobile Only Title & Subtitle */}
-        <div className="md:hidden text-center px-6 py-10">
-          <h1 className="text-3xl font-bold mb-4">{title}</h1>
-          <p className="text-base text-gray-300">{title1}</p>
-        </div>
+        <ProofSignup/>
       </section>
 
       {/* Trusted Section — Show on all screens */}
