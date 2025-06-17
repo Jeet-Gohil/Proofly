@@ -6,6 +6,7 @@ import HotStreaksSection from '../components/StreakSection';
 import LiveVisitorCount from '../components/LiveVisitors';
 import RecentActivitySection from '../components/RecentActivitySection';
 import Link from 'next/link';
+import HowItWorks from '../components/HowItWorks';
 
 const HeroSection: React.FC = () => {
   return (
@@ -43,9 +44,10 @@ const HeroSection: React.FC = () => {
         </div>
       </div>
     </section>
-    <HotStreaksSection/>  
+    {/* <HotStreaksSection/>  
     <LiveVisitorCount/>
-    <RecentActivitySection/>
+    <RecentActivitySection/> */}
+    <HowItWorks/>
     </div>
   );
 };

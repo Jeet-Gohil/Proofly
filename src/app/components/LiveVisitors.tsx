@@ -1,5 +1,6 @@
 import React from "react";
 import { CheckCircle } from "lucide-react";
+import Image from "next/image";
 
 const LiveVisitorCount: React.FC = () => {
   return (
@@ -9,11 +10,7 @@ const LiveVisitorCount: React.FC = () => {
         {/* Left - Image with overlay count */}
         <div className="relative w-full md:w-1/2">
           <div className="rounded-lg overflow-hidden shadow-xl">
-            <img
-              src="https://cdn.prod.website-files.com/59318798d83bff2781822428/5e1554669ba5cbdcc141a159_Screen%20Shot%202020-01-03%20at%203.23%20(1)-p-1080.jpeg"
-              alt="Live Visitor Screenshot"
-              className="w-full object-cover"
-            />
+            <Image src= "/LiveVisitor.jpeg" alt="loading..." fill className="w-full object-cover" />
           </div>
 
           {/* Visitor Count Badge */}

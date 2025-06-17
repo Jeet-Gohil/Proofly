@@ -1,5 +1,7 @@
 import React from "react";
 import { Flame } from "lucide-react";
+import image from "../../../public/HotStreaks.jpeg"
+import Image from "next/image";
 
 const HotStreaksSection: React.FC = () => {
   return (
@@ -36,11 +38,7 @@ const HotStreaksSection: React.FC = () => {
         <div className="relative w-full">
           {/* Browser Mockup Image */}
           <div className="bg-gray-100 rounded-xl overflow-hidden shadow-lg">
-            <img
-              src="https://cdn.prod.website-files.com/59318798d83bff2781822428/5e1554669ba5cbdcc141a159_Screen%20Shot%202020-01-03%20at%203.23%20(1)-p-1080.jpeg"
-              alt="browser mockup"
-              className="w-full h-auto"
-            />
+            <Image fill src= {image} alt={"Loading..."} className="w-full h-auto"/>
           </div>
 
           {/* Floating Hot Streak Card */}

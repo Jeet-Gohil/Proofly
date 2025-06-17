@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
-
-
+import { Providers } from "./providers";
+import 'leaflet/dist/leaflet.css';
 
 
 export const metadata: Metadata = {
@@ -19,13 +18,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script src="http://localhost:3000/api/Tracker" data-user-id="ac51341c-578f-4cd6-91a9-87a939489215" data-site-id="9fa01ee2-3a94-4837-8a11-d7d4b07291ad"></script>
+      </head>
       <body>
-        <ClerkProvider>
+        <Providers>
           <Navbar/>
         {children}
         <Footer/>
-        </ClerkProvider>
-        
+        </Providers>
       </body>
     </html>
   );

@@ -1,11 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from '@/app/lib/db';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/lib/AuthOptions";
 
 export async function GET() {
-    const data = await pool.query('SELECT * FROM sites');
-    return NextResponse.json({
-        data: data.rows[0]
-    });
+  const session = await getServerSession(authOptions);
+  console.log(session);
+  if (!session || !session.user?.email) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+    const email = session.user.email;
+    console.log(email);
+    try {
+    const result = await pool.query(
+      `SELECT * FROM sites WHERE email = $1`,
+      [email]
+    );
+    console.log(result);
+
+    return NextResponse.json(result.rows);
+  } catch (err) {
+    console.error("Error fetching sites", err);
+    return NextResponse.json({ error: "Failed to fetch sites" }, { status: 500 });
+  }
 }
 
 export  async function POST (req : NextRequest) {

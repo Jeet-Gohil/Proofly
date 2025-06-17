@@ -4,6 +4,9 @@ import { DraggableCardDemo } from "./components/ui/DraggableCards";
 import { SVGMaskEffectDemo } from "./components/ui/Mask-Effect";
 import React from "react";
 import ProofSignup from "./components/PhoneHeroSection";
+import MosaicImage from "@/components/ui/Mosaic-Image";
+import { CardHoverEffectDemo } from "./components/ui/CardHoverEffect";
+
 
 const title = 'Boost your website conversions by 15% in under 15 minutes';
 const title1 = `We believe customer-obsessed marketing is the best kind of marketing. Proof makes it easy. Make your website delightfully human.`;
@@ -11,16 +14,14 @@ const title1 = `We believe customer-obsessed marketing is the best kind of marke
 export default function Home() {
   return (
     <div>
-      <section className="relative overflow-hidden bg-[#0f172a] text-white">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#0a0a0a] via-[#121212] to-black text-white HeroSection bg-cover">
+        
         {/* Background Gradient Blobs (Desktop Only) */}
-        <div className="hidden md:block absolute inset-0 z-0 pointer-events-none">
-          <div className="absolute w-[500px] h-[500px] bg-[#3ec6ff] opacity-30 rounded-full mix-blend-screen filter blur-3xl animate-blob animation-delay-2000 top-[-100px] left-[-100px]"></div>
-          <div className="absolute w-[400px] h-[400px] bg-[#0ea5e9] opacity-30 rounded-full mix-blend-screen filter blur-3xl animate-blob animation-delay-4000 top-[200px] left-[300px]"></div>
-          <div className="absolute w-[600px] h-[600px] bg-[#38bdf8] opacity-30 rounded-full mix-blend-screen filter blur-3xl animate-blob top-[400px] left-[-200px]"></div>
-        </div>
+        <div className="hidden md:block absolute inset-0 z-0 pointer-events-none ">  
+         </div>
 
         {/* Desktop Content */}
-        <div className="relative z-10 hidden md:grid max-w-6xl mx-auto grid-cols-2 items-center gap-30 py-5 px-4">
+         <div className="relative z-10 hidden md:grid max-w-6xl mx-auto grid-cols-2 items-center gap-15 py-2 px-1">
           <div className="space-y-4">
             <SVGMaskEffectDemo />
             <p className="text-sm text-gray-300 mt-4">
@@ -28,23 +29,14 @@ export default function Home() {
             </p>
           </div>
           <div className="relative">
-            <img
-              src="https://uploads-ssl.webflow.com/59318798d83bff2781822428/5f7b7e04b4ac83ac14c65bfa_Rachel%203x%20(1).jpg"
-              alt="Customer"
-              className="w-full h-auto object-cover rounded-[40px] shadow-2xl hover:scale-105 transition duration-500"
-            />
-            <div className="absolute bottom-4 right-4 bg-white text-black rounded-xl shadow-xl p-4 w-[250px]">
-              <p className="text-sm text-gray-500 mb-1">Featured customer</p>
-              <p className="font-bold text-sm">Rachel Pedersen</p>
-              <p className="text-blue-600 text-sm mb-2">
-                Founder of Social Media &<br />The Viral Touch
-              </p>
-              <p className="text-xl font-semibold text-gray-800">+300%</p>
-              <p className="text-sm text-gray-500">leads last 30 days</p>
-              <div className="mt-1 h-1.5 bg-gradient-to-r from-cyan-400 to-teal-300 rounded"></div>
-            </div>
+            <div
+              className="object-cover rounded-[40px] shadow-2xl hover:scale-105 transition duration-500"> 
+              <div className="HeroSectionImage mb-20">
+                <MosaicImage src= "/HeroSection.png" gridSize={25}/>
+              </div>
+              </div>
           </div>
-        </div>
+        </div> 
 
         {/* Mobile Only Title & Subtitle */}
         <ProofSignup/>
@@ -73,7 +65,7 @@ export default function Home() {
           The fastest way to convert visitors into leads and sales on your website is
           with Social Proof Marketing. That’s why 25,000+ businesses use Proof.
         </p>
-        <Link href="/HowItWorks" className="bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-3 rounded font-medium text-base inline-block">
+        <Link href="/HowItWorks" className="bg-indigo-600 hover:bg-indigo-400 transition text-white px-6 py-3 rounded font-medium text-base inline-block">
           How it Works?
         </Link>
       </section>
@@ -90,6 +82,17 @@ export default function Home() {
         <DraggableCardDemo />
         <p className="text-base"><span className="font-bold">Fun fact :-</span> you can actually Drag this cards.</p>
       </section>
+
+    {/* how to get started*/}
+    <section className="bg-gray-800 py-12 text-center px-6 md:px-4 getStartedSection">
+      <h2 className="text-3xl md:text-5xl font-semibold text-white mb-6">
+          How to get Started !
+        </h2>
+        <p className="text-base md:text-lg text-white max-w-2xl mx-auto leading-relaxed mb-6">
+          Please follow the below given steps !
+        </p>
+        <CardHoverEffectDemo/>
+    </section>
     </div>
   );
 }

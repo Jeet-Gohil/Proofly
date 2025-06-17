@@ -146,6 +146,12 @@
   color: black
 }
 
-.heroSection {
+.HeroSectionImage {
+  position: relative;
+  
+}
 
+.HeroSection {
+height: 40rem;
+width: 100%;
 }

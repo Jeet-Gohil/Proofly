@@ -14,7 +14,7 @@ export function TypewriterEffectDemo() {
     },
     {
       text: "Proofly.com",
-      className: "text-white dark:text-blue-500"
+      className: "text-purple dark:text-blue-500"
     },
   ];
   return (

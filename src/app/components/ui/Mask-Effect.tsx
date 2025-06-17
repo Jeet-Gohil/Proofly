@@ -11,7 +11,7 @@ export function SVGMaskEffectDemo() {
           <TypewriterEffectDemo/>
           </div>
         }
-        className="text-white dark:text-black"
+        className="text-purple dark:text-black"
       >
         <div>
             <p className="text-base mb-3 flex gap-2">

@@ -1,27 +1,21 @@
 // types/next-auth.d.ts
+import NextAuth from "next-auth";
 
-
-
-declare module 'next-auth' {
+declare module "next-auth" {
   interface Session {
     user: {
       name?: string | null;
       email?: string | null;
       image?: string | null;
-      id?: string;     // 👈 Add this line
-      uuid?: string;   // 👈 If you're using uuid specifically
+      uuid?: string; // 👈 Add this
     };
   }
 
   interface User {
-    id: string;        // For use in callbacks (e.g., jwt)
-    uuid?: string;     // Optional if different from `id`
+    uuid?: string;
   }
-}
 
-declare module 'next-auth/jwt' {
   interface JWT {
-    id?: string;
     uuid?: string;
   }
 }

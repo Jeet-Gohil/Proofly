@@ -1,67 +1,80 @@
-// server.ts or index.ts
-import { createServer } from 'http';
 import { Server } from 'socket.io';
+import express from 'express';
+import http from 'http';
+import cors from 'cors';
+import { Pool } from 'pg';
 
-const httpServer = createServer();
+const pool = new Pool({
+    connectionString : "postgresql://postgres:iconjeet172004@localhost:5432/proofly",
+});
 
-const io = new Server(httpServer, {
+const app = express();
+app.use(cors());
+
+const server = http.createServer(app);
+
+const io = new Server(server, {
   cors: {
-    origin: '*', // Use '*' temporarily for debugging. Restrict to 'http://localhost:3000' later
+    origin: '*',   // Allow frontend
     methods: ['GET', 'POST'],
-    credentials : true
   },
+  transports: ['websocket'], // Force websocket for consistency
 });
 
 io.on('connection', (socket) => {
-  console.log(`✅ Client connected: ${socket.id}`);
+  console.log('[socket] client connected:', socket.id);
 
-  // Debug all incoming events from client
-  socket.onAny((event, ...args) => {
-    console.log(`📩 [${socket.id}] Event received: '${event}'`, args);
-  });
-
-  // Optional: Join room based on siteId for grouped live events
   socket.on('join_site', (siteId) => {
     socket.join(siteId);
-    console.log(`🏠 Socket ${socket.id} joined site room ${siteId}`);
+    console.log(`[socket] ${socket.id} joined site: ${siteId}`);
   });
 
-  // Actual page view tracking event
-  socket.on('page_view', async (data) => {
-    console.log('📄 page_view received!');
-    console.log(data);
+  socket.on('page_view', (data) => {
+    const { siteId, path, timestamp, referrer, userId } = data;
+
+    if (!siteId || !path) return;
+
+    console.log(`[socket] Emitting live_view to siteId ${siteId}`, data);
+
+    io.to(siteId).emit('live_view', {
+      siteId,
+      path,
+      timestamp,
+      userId,
+      referrer,
+    });
+  });
+    socket.on('heatmap_event', async (data) => {
+    const {
+      userId,
+      siteId,
+      sessionId,
+      path,
+      event_type,
+      x,
+      y,
+      scroll_depth,
+      timestamp,
+    } = data;
+
     try {
-        console.log('📄 page_view received!');
-        const { userId, siteId, path, referrer, timestamp } = data;
-
-      console.log(`📄 Page view logged for site ${siteId}:`, {
-        siteId,
-        userId,
-        path,
-        referrer,
-        timestamp,
-      });
-
-      // Broadcast to other users in the same site room
-      io.to(siteId).emit('live_view', {
-        siteId,
-        path,
-        timestamp,
-      });
-
-      // Future: Save to DB here if needed
-      // await db.insert('page_views', { userId, siteId, path, referrer, timestamp });
-
-    } catch (error) {
-      console.error('❌ Error in page_view handler:', error);
+      const heatmap_data = await pool.query(
+        `INSERT INTO heatmap_events
+         (user_id, site_id, session_id, path, event_type, x, y, scroll_depth, timestamp)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+        [userId, siteId, sessionId, path, event_type, x ?? null, y ?? null, scroll_depth ?? null, timestamp]
+      );
+      console.log(heatmap_data);
+    } catch (err) {
+      console.error('Error inserting heatmap event:', err);
     }
   });
 
-  socket.on('disconnect', (reason) => {
-    console.log(`❎ Client disconnected: ${socket.id}. Reason: ${reason}`);
+  socket.on('disconnect', () => {
+    console.log('[socket] client disconnected:', socket.id);
   });
 });
 
-httpServer.listen(3001, '0.0.0.0', () => {
-  console.log('🚀 Socket.IO server running at http://localhost:3001');
+server.listen(3001, () => {
+  console.log('[server] Socket.IO listening on http://localhost:3001');
 });

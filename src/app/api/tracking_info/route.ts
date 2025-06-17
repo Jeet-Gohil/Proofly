@@ -1,51 +1,51 @@
-import pool from '@/app/lib/db';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
+import pool from "@/app/lib/db";
+import { console } from "inspector";
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const site_url = searchParams.get('site_url');
-  console.log(site_url);
+export async function POST(req : NextRequest) {
+  const data = await req.json();
+  console.log(data);
+   const {
+    userId,
+    siteId,
+    sessionId,
+    path,
+    referrer,
+    timestamp,
+    user_agent,
+    ip_address
+  } = data;
+  console.log(data);
+   const ip = req.headers.get('x-forwarded-for') || 'unknown';
+  const userAgent = req.headers.get('user-agent') || 'unknown';
+  const res = pool.query('INSERT INTO page_views (site_id, user_id, session_id, ip_address, user_agent, path, referrer, timestamp) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING*', [
+    siteId,
+    userId,
+    sessionId,
+    ip_address,
+    user_agent,
+    path,
+    referrer,
+    timestamp,
+  ]);
+  return new Response('ok', { status: 200 });
+}
 
-  if (!site_url) {
-    return NextResponse.json({ error: 'Missing site_url parameter' }, { status: 400 });
-  }
-
+export async function GET(req: NextRequest, context: { params: Promise<{ siteId: string }> }) {
+   const { siteId } = await context.params; 
   try {
-    const result = await pool.query(
-      `
-      SELECT 
-  s.site_id,
-  s.site_url,
-  s.site_name,
-  s.description,
-  s.tracking_type,
-  s.domain_verified,
-  s.tracking_script_injected,
-  s.geo_tracking_enabled,
-  s.logo_url,
-  s.tags,
-  s.status,
-  u.id AS user_id,
-  u.name AS user_name,
-  u.email,
-  u.image AS user_image,
-  u.provider,
-  u.created_at
-FROM sites s
-JOIN users u ON s.email = u.email
-where s.site_url = $1 LIMIT 1
-
-      `, [site_url]
-    );
-
-    if (result.rows.length === 0) {
-      return NextResponse.json({ error: 'Site not found' }, { status: 404 });
-    }
-
-    const { site_id, user_id } = result.rows[0];
-    return NextResponse.json({ site_id, user_id });
-  } catch (error) {
-    console.error('[TRACK_INFO_API_ERROR]', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    const total_visits = await pool.query('SELECT COUNT(*) FROM page_views WHERE site_id = ${siteId}');
+    const total_users = await pool.query('SELECT COUNT(DISTINCT user_id) FROM page_views WHERE site_id = ${siteId}');
+    const active_users = await pool.query(`SELECT COUNT (DISTINCT session_id) FROM page_views WHERE site_id = ${siteId} AND timestamp >= NOW() - INTERVAL '5 minutes'`);
+    console.log(total_users.rows[0].count);
+     return NextResponse.json({
+      totalVisits: Number(total_visits.rows[0].count),
+      totalUsers: Number(total_users.rows[0].count),
+      activeUsers: Number(active_users.rows[0].count),
+    });
+  }
+  catch(err) {
+    console.error('Analytics error:', err);
+    return NextResponse.json({ error: 'Failed to fetch analytics' }, { status: 500 });
   }
 }
