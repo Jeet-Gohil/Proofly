@@ -5,7 +5,7 @@ import { authOptions } from "@/app/lib/AuthOptions";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
-  console.log(session);
+ 
   if (!session || !session.user?.email) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -16,7 +16,7 @@ export async function GET() {
       `SELECT * FROM sites WHERE email = $1`,
       [email]
     );
-    console.log(result);
+  
 
     return NextResponse.json(result.rows);
   } catch (err) {

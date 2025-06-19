@@ -44,3 +44,9 @@ pnpm-lock.yaml
 
 # clerk configuration (can include secrets)
 /.clerk/
+
+/src/generated/prisma
+
+/src/generated/prisma
+
+/src/generated/prisma

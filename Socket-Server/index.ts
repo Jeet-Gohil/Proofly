@@ -2,11 +2,9 @@ import { Server } from 'socket.io';
 import express from 'express';
 import http from 'http';
 import cors from 'cors';
-import { Pool } from 'pg';
 
-const pool = new Pool({
-    connectionString : "postgresql://postgres:iconjeet172004@localhost:5432/proofly",
-});
+
+
 
 const app = express();
 app.use(cors());
@@ -44,31 +42,31 @@ io.on('connection', (socket) => {
       referrer,
     });
   });
-    socket.on('heatmap_event', async (data) => {
-    const {
-      userId,
-      siteId,
-      sessionId,
-      path,
-      event_type,
-      x,
-      y,
-      scroll_depth,
-      timestamp,
-    } = data;
+  //   socket.on('heatmap_event', async (data) => {
+  //   // const {
+  //   //   userId,
+  //   //   siteId,
+  //   //   sessionId,
+  //   //   path,
+  //   //   event_type,
+  //   //   x,
+  //   //   y,
+  //   //   scroll_depth,
+  //   //   timestamp,
+  //   // } = data;
 
-    try {
-      const heatmap_data = await pool.query(
-        `INSERT INTO heatmap_events
-         (user_id, site_id, session_id, path, event_type, x, y, scroll_depth, timestamp)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
-        [userId, siteId, sessionId, path, event_type, x ?? null, y ?? null, scroll_depth ?? null, timestamp]
-      );
-      console.log(heatmap_data);
-    } catch (err) {
-      console.error('Error inserting heatmap event:', err);
-    }
-  });
+  //   try {
+  //     // const heatmap_data = await pool.query(
+  //     //   `INSERT INTO heatmap_events
+  //     //    (user_id, site_id, session_id, path, event_type, x, y, scroll_depth, timestamp)
+  //     //    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+  //     //   [userId, siteId, sessionId, path, event_type, x ?? null, y ?? null, scroll_depth ?? null, timestamp]
+  //     // );
+  //     // console.log(heatmap_data);
+  //   } catch (err) {
+  //     console.error('Error inserting heatmap event:', err);
+  //   }
+  // });
 
   socket.on('disconnect', () => {
     console.log('[socket] client disconnected:', socket.id);

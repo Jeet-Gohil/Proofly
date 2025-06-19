@@ -13,6 +13,8 @@ interface PageViewData {
   timestamp: string;
   referrer: string;
   userId: string;
+  ip_address : string,
+  sessionId : string,
 }
 
 interface SiteData {
@@ -48,13 +50,19 @@ export default function AnalyticsPage() {
       socket?.emit('join_site', siteId);
     });
 
-    socket.on('live_view', (data: PageViewData) => {
+    socket.on('live_view', async (data: PageViewData) => {
       if (data.siteId !== siteId) return;
 
       setViews((prev) => {
         const updated = [data, ...prev];
         return updated.slice(0, 5);
       });
+
+      await fetch('/api/tracking_info', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+  });
     });
 
     socket.on('connect_error', (err) => {

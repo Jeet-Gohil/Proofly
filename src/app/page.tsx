@@ -8,9 +8,6 @@ import MosaicImage from "@/components/ui/Mosaic-Image";
 import { CardHoverEffectDemo } from "./components/ui/CardHoverEffect";
 
 
-const title = 'Boost your website conversions by 15% in under 15 minutes';
-const title1 = `We believe customer-obsessed marketing is the best kind of marketing. Proof makes it easy. Make your website delightfully human.`;
-
 export default function Home() {
   return (
     <div>
@@ -55,6 +52,7 @@ export default function Home() {
           <img src="https://uploads-ssl.webflow.com/59318798d83bff2781822428/5f7bbb430d35ec73a37c25a5_Klientboost.svg" alt="KlientBoost" className="h-6" />
           <img src="https://uploads-ssl.webflow.com/59318798d83bff2781822428/5f7bbb447c007628c8183689_Foundr%20logo.svg" alt="Foundr" className="h-6" />
         </div>
+        
         <p className="text-sm font-bold tracking-wide text-blue-600 uppercase mb-2">
           Most Popular Product
         </p>
