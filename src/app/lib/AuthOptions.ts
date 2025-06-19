@@ -160,6 +160,9 @@ export const authOptions: NextAuthOptions = {
         return false;
       }
     },
+    async redirect() {
+      return 'https://proofly-phi.vercel.app/callback'
+    },
   },
   secret: process.env.NEXTAUTH_SECRET,
  
