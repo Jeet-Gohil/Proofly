@@ -34,7 +34,7 @@ export default function DashboardLayout({
           }
         )}
       >
-        <h1 className="text-2xl font-bold text-indigo-400">Welcome Jeet !!</h1>
+        <h1 className="text-2xl font-bold text-indigo-400">Welcome </h1>
         <nav className="flex flex-col gap-2">
           {navItems.map((item) => {
             const Icon = item.icon;
