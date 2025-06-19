@@ -13,7 +13,7 @@ const LoginForm: React.FC = () => {
         <h2 className="text-center text-2xl font-bold text-gray-900">Welcome to Proof</h2>
 
         <button onClick={()=> signIn('google' , {
-          callbackUrl :  `/callback`
+          callbackUrl :  `${window.location.origin}/callback`
         }
         )}
           type="button"
