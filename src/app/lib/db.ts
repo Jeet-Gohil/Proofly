@@ -1,7 +1,10 @@
 import { Pool } from "pg";
 
 const pool = new Pool({
-    connectionString : "postgresql://postgres:iconjeet172004@db.iiwlukmccjowosaqxopg.supabase.co:5432/postgres",
+    connectionString : process.env.DATABASE_URL,
+    ssl : {
+        rejectUnauthorized : false
+    }
 });
 
 export default pool;
