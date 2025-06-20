@@ -148,12 +148,12 @@ export const authOptions: NextAuthOptions = {
         const provider = account?.provider || "unknown";
         const result = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
 
-        // if (result.rows.length === 0) {
-        //   await pool.query(
-        //     "INSERT INTO users (email, name, image, provider) VALUES ($1, $2, $3, $4)",
-        //     [email, name, image, provider]
-        //   );
-        // }
+        if (result.rows.length === 0) {
+          await pool.query(
+            "INSERT INTO users (email, name, image, provider) VALUES ($1, $2, $3, $4)",
+            [email, name, image, provider]
+          );
+        }
 
         return true;
       } catch (error) {
@@ -162,7 +162,7 @@ export const authOptions: NextAuthOptions = {
       }
     },
     async redirect() {
-      return 'https://proofly-delta.vercel.app/callback'
+      return 'https://proofly-delta.vercel.app//callback'
     },
     
   },

@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <script src="http://localhost:3000/api/Tracker" data-user-id="a777ef35-1911-449c-adb0-48c8cc0c894c" data-site-id="10aac976-71d0-4412-96ed-0a862d98046a"></script>
+        <script src="http://localhost:3000/api/Tracker" data-user-id="5e6bcd29-77c8-4dbe-a28b-1c8986fc8694" data-site-id="326e568b-445e-44a3-a182-e6e756d9c37e"></script>
       </head>
       <body>
         <Providers>
