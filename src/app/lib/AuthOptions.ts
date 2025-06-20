@@ -96,12 +96,13 @@ import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import pool from "./db";
+import { signIn } from "next-auth/react";
 
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
-      clientId: process.env.NEXT_PUBLIC_GOOGLE_API_KEY!,
-      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_SECRET_KEY!,
+      clientId: process.env.GOOGLE_API_KEY!,
+      clientSecret: process.env.GOOGLE_SECRET_KEY!,
     }),
     CredentialsProvider({
       name: "Credentials",
@@ -163,6 +164,10 @@ export const authOptions: NextAuthOptions = {
     async redirect() {
       return 'https://proofly-phi.vercel.app/callback'
     },
+    
+  },
+  pages : {
+    signIn : "/login"
   },
   secret: process.env.NEXTAUTH_SECRET,
  
