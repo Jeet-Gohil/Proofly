@@ -12,7 +12,7 @@ export default function TrackerEmbed({ userId, siteId }: Props) {
   const [copied, setCopied] = useState(false);
   const [showMore, setShowMore] = useState(false);
 
-  const scriptCode = `<script src="http://localhost:3000/api/tracker" data-user-id="${userId}" data-site-id="${siteId}"></script>`;
+  const scriptCode = `<script src="https://proofly-delta.vercel.app/api/tracker" data-user-id="${userId}" data-site-id="${siteId}"></script>`;
 
   const handleCopy = async () => {
     try {
@@ -69,7 +69,7 @@ export default function TrackerEmbed({ userId, siteId }: Props) {
     <span className="text-pink-400">&lt;html&gt;</span>{'\n'}
     {'  '}<span className="text-pink-400">&lt;head&gt;</span>{'\n'}
     {'    '}<span className="text-pink-400">&lt;script</span>{' '}
-    <span className="text-yellow-300">src</span>=<span className="text-green-400">"http://localhost:3000/api/tracker"</span>{' '}
+    <span className="text-yellow-300">src</span>=<span className="text-green-400">"https://proofly-delta.vercel.app/api/tracker"</span>{' '}
     <span className="text-yellow-300">data-user-id</span>=<span className="text-green-400">"{userId}"</span>{' '}
     <span className="text-yellow-300">data-site-id</span>=<span className="text-green-400">"{siteId}"</span>
     <span className="text-pink-400">&gt;&lt;/script&gt;</span>{'\n'}
@@ -90,7 +90,7 @@ export default function TrackerEmbed({ userId, siteId }: Props) {
     <span className="text-pink-400">&lt;head&gt;</span>{'\n'}
     {'  '}{'{/* Other tags */'}{'}'}{'\n'}
     {'  '}<span className="text-pink-400">&lt;script</span>{' '}
-    <span className="text-yellow-300">src</span>=<span className="text-green-400">"http://localhost:3000/api/tracker"</span>{' '}
+    <span className="text-yellow-300">src</span>=<span className="text-green-400">"https://proofly-delta.vercel.app/api/tracker"</span>{' '}
     <span className="text-yellow-300">data-user-id</span>=<span className="text-green-400">"{userId}"</span>{' '}
     <span className="text-yellow-300">data-site-id</span>=<span className="text-green-400">"{siteId}"</span>
     <span className="text-pink-400">&gt;&lt;/script&gt;</span>{'\n'}
