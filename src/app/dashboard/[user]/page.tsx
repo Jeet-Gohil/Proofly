@@ -3,7 +3,7 @@
 
 import UserSites from "@/app/components/SiteList";
 import { useEffect, useState } from "react";
-import { fetchWithLoader } from "@/app/lib/FetchWithLoader";
+
 
 // ✅ Define Site interface here or import it if already defined elsewhere
 interface Site {
@@ -28,7 +28,7 @@ export default function SitesPage() {
 
   useEffect(() => {
     const fetchSites = async () => {
-      const res = await fetchWithLoader("/api/sites");
+      const res = await fetch("/api/sites");
       const data: Site[] = await res.json();
       setSites(data);
     };
