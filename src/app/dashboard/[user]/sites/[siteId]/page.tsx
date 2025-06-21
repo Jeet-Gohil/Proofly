@@ -19,6 +19,7 @@ interface PageViewData {
 }
 
 interface SiteData {
+  ok: any;
   site: {
     site_id: string;
     site_name: string;
@@ -81,11 +82,11 @@ export default function AnalyticsPage() {
     if (!siteId) return;
 
     const fetchSiteInfo = async () => {
-      const res = await fetchWithLoader(`/api/sites/${siteId}`);
-      const data = await res.json();
-      if (res.ok) {
-        setSiteInfo(data);
-      }
+      const res = await fetchWithLoader<SiteData>(`/api/sites/${siteId}`);
+      
+      
+        setSiteInfo(res);
+      
     };
 
     fetchSiteInfo();

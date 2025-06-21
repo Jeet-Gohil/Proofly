@@ -1,5 +1,4 @@
-import { loadingService } from "./LoadingService";
-
+import { loadingService } from "./LoadingService"
 export async function fetchWithLoader<T = any>(
   input: RequestInfo,
   init?: RequestInit
@@ -8,8 +7,10 @@ export async function fetchWithLoader<T = any>(
   try {
     const res = await fetch(input, init);
     if (!res.ok) throw new Error(`Error: ${res.status}`);
-    const data = await res.json();
-    return data;
+    return await res.json();
+  } catch (error) {
+    console.error('[fetchWithLoader] error:', error);
+    throw error;
   } finally {
     loadingService.stop();
   }
