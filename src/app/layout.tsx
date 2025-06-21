@@ -3,8 +3,8 @@ import "./globals.css";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import { Providers } from "./providers";
-import 'leaflet/dist/leaflet.css';
-
+import LoadingOverlay from "./components/RouteLoader";
+import { ThemeProvider } from 'next-themes';
 
 export const metadata: Metadata = {
   title: "Proofly.com",
@@ -19,14 +19,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <script src="https://proofly-delta.vercel.app/api/Tracker" data-user-id="5e6bcd29-77c8-4dbe-a28b-1c8986fc8694" data-site-id="326e568b-445e-44a3-a182-e6e756d9c37e"></script>
+        {/* <script src="https://proofly-delta.vercel.app/api/Tracker" data-user-id="5e6bcd29-77c8-4dbe-a28b-1c8986fc8694" data-site-id="326e568b-445e-44a3-a182-e6e756d9c37e"></script> */}
       </head>
       <body>
+       
         <Providers>
           <Navbar/>
+          <LoadingOverlay/>
         {children}
         <Footer/>
         </Providers>
+        
       </body>
     </html>
   );

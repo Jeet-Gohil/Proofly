@@ -1,13 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { Moon, Sun, Wallet, Menu, X, LogIn } from 'lucide-react';
+import { Menu, X, LogIn } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
-  const [isDarkMode, setIsDarkMode] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const router = useRouter();
   const {data : session} = useSession();
@@ -58,20 +58,7 @@ const goToDashboard = () => {
           {/* Right side controls */}
           <div className="flex items-center space-x-4">
             {/* Toggle */}
-            <div className="hidden md:flex items-center space-x-2">
-              <Sun size={18} />
-              <button
-                className="relative w-10 h-5 rounded-full bg-purple-600 transition"
-                onClick={() => setIsDarkMode(!isDarkMode)}
-              >
-                <span
-                  className={`absolute top-[2px] left-[2px] h-4 w-4 rounded-full bg-white transition-transform ${
-                    isDarkMode ? 'translate-x-5' : ''
-                  }`}
-                />
-              </button>
-              <Moon size={18} />
-            </div>
+           <ThemeToggle/>
 
             {/* Wallet Button */}
             <button onClick={()=> {router.push('/login')}} className="hidden md:flex items-center gap-2 px-4 py-2 bg-[#2A0E61] text-purple-300 rounded-lg border border-[#3c1a75] hover:bg-[#3c1a75] transition">
@@ -108,7 +95,7 @@ const goToDashboard = () => {
           </ul>
 
           {/* Toggle & Wallet on mobile */}
-          <div className="flex items-center space-x-4 mt-4">
+          {/* <div className="flex items-center space-x-4 mt-4">
             <Sun size={18} />
             <button
               className="relative w-10 h-5 rounded-full bg-purple-600 transition"
@@ -121,11 +108,13 @@ const goToDashboard = () => {
               />
             </button>
             <Moon size={18} />
-          </div>
+          </div> */}
+          <ThemeToggle/>
+          
 
-          <button className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2 bg-[#2A0E61] text-purple-300 rounded-lg border border-[#3c1a75] hover:bg-[#3c1a75] transition">
-            <Wallet size={16} />
-            <span className="text-sm font-medium">Connect Wallet</span>
+          <button className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2 bg-[#2A0E61] text-purple-300 rounded-lg border border-[#3c1a75] hover:bg-[#3c1a75] transition" onClick={()=> {router.push('/login')}}>
+            <LogIn size={16} />
+            <span className="text-sm font-medium">Login</span>
           </button>
         </div>
       )}

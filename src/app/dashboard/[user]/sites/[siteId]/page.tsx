@@ -6,6 +6,7 @@ import io from 'socket.io-client';
 import  { Socket } from 'socket.io-client'; // import as type
 import AnalyticsOverview from '@/app/components/AnalyticsOverview';
 import TrackerEmbed from '@/app/components/ScriptDisplay';
+import { fetchWithLoader } from '@/app/lib/FetchWithLoader';
 
 interface PageViewData {
   siteId: string;
@@ -80,7 +81,7 @@ export default function AnalyticsPage() {
     if (!siteId) return;
 
     const fetchSiteInfo = async () => {
-      const res = await fetch(`/api/sites/${siteId}`);
+      const res = await fetchWithLoader(`/api/sites/${siteId}`);
       const data = await res.json();
       if (res.ok) {
         setSiteInfo(data);

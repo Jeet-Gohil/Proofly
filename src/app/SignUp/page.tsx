@@ -1,10 +1,10 @@
 'use client'
-import SignupForm from "../components/SignUpForm";
+import { SignupFormDemo } from "../components/ui/Input";
 
 export default function SignupPage() {
     return (
         <div>
-            <SignupForm />
+            <SignupFormDemo />
         </div>
     );
 }

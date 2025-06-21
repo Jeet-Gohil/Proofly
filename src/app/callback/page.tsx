@@ -4,6 +4,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation"; // ✅ correct for App Router
 import { useSession } from "next-auth/react";
+import LoadingOverlay from "../components/RouteLoader";
 
 export default function AuthCallbackPage() {
   const { data: session, status } = useSession();
@@ -19,5 +20,5 @@ export default function AuthCallbackPage() {
     }
   }, [status, session, router]);
 
-  return <div className="text-center mt-10">Redirecting to your dashboard...</div>;
+  return <LoadingOverlay/>
 }
