@@ -4,11 +4,14 @@ import { useState } from 'react';
 import {FaGoogle } from 'react-icons/fa';
 import { useTheme } from 'next-themes'; // if you're using next-themes
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { theme } = useTheme(); // optional, to adapt colors programmatically
+  const router = useRouter();
 
   const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,6 +82,11 @@ const LoginForm: React.FC = () => {
           <button
             type="submit"
             className="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-all"
+            onClick={()=> {signIn('credentials', {
+              email,
+              password,
+              callbackUrl : `${window.location.origin}/callback`
+            })}}
           >
             Sign In
           </button>

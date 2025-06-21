@@ -6,28 +6,33 @@ import { loadingService } from '../lib/LoadingService';
 
 export default function LoadingOverlay() {
   const pathname = usePathname();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isApiLoading, setIsApiLoading] = useState(false);
+  const [isRouteChanging, setIsRouteChanging] = useState(false);
 
+  // 👇 Handle API loading state from global loadingService
   useEffect(() => {
-    let timer: NodeJS.Timeout;
-
-    // Show overlay briefly on route change
-    setIsLoading(true);
-    timer = setTimeout(() => setIsLoading(false), 500); // at least 500ms
-
-    return () => clearTimeout(timer);
-  }, [pathname]);
-
-  useEffect(() => {
-    // Listen to global API loading state
-    const unsubscribe = loadingService.subscribe((apiLoading) => {
-      setIsLoading(apiLoading);
+    const unsubscribe = loadingService.subscribe((loading) => {
+      setIsApiLoading(loading);
     });
 
     return () => unsubscribe();
   }, []);
 
-  if (!isLoading) return null;
+  // 👇 Handle route change "flash"
+  useEffect(() => {
+    setIsRouteChanging(true);
+
+    const timer = setTimeout(() => {
+      setIsRouteChanging(false);
+    }, 800); // Route loading overlay visible for 800ms
+
+    return () => clearTimeout(timer);
+  }, [pathname]);
+
+  // 👇 Show overlay if either API is loading or route is changing
+  const showOverlay = isApiLoading || isRouteChanging;
+
+  if (!showOverlay) return null;
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm">

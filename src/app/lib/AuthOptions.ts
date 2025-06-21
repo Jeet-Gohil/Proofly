@@ -96,7 +96,7 @@ import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import pool from "./db";
-import { signIn } from "next-auth/react";
+import bcrypt from "bcryptjs";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -107,18 +107,30 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
+        email: {},
+        password: {}
       },
       async authorize(credentials) {
-        if (
-          credentials?.email === "test@example.com" &&
-          credentials?.password === "password"
-        ) {
-          return { id: "1", name: "Test User", email: "test@example.com" };
-        }
-        return null;
-      },
+        const { email, password } = credentials as {
+          email: string;
+          password: string;
+        };
+
+        const result = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+        const user = result.rows[0];
+
+        if (!user) throw new Error("User not found");
+
+        const isValid = await bcrypt.compare(password, user.password);
+        if (!isValid) throw new Error("Invalid password");
+
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          uuid: user.id, // or user.uuid if UUID column exists
+        };
+      }
     }),
   ],
   session: {
@@ -162,7 +174,7 @@ export const authOptions: NextAuthOptions = {
       }
     },
     async redirect() {
-      return 'https://proofly-delta.vercel.app//callback'
+      return 'http://localhost:3000/callback'
     },
     
   },
