@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import io from 'socket.io-client';
-import  { Socket } from 'socket.io-client'; // import as type
+import io, { Socket } from 'socket.io-client';
 import AnalyticsOverview from '@/app/components/AnalyticsOverview';
 import TrackerEmbed from '@/app/components/ScriptDisplay';
+import { Eye } from 'lucide-react';
 import { fetchWithLoader } from '@/app/lib/FetchWithLoader';
 
 interface PageViewData {
@@ -14,8 +14,8 @@ interface PageViewData {
   timestamp: string;
   referrer: string;
   userId: string;
-  ip_address : string,
-  sessionId : string,
+  ip_address: string;
+  sessionId: string;
 }
 
 interface SiteData {
@@ -30,13 +30,13 @@ interface SiteData {
   active_users: number;
 }
 
-// ✅ Declare socket with correct type
 let socket: Socket | null = null;
 
 export default function AnalyticsPage() {
   const { siteId, user } = useParams();
   const [views, setViews] = useState<PageViewData[]>([]);
   const [siteInfo, setSiteInfo] = useState<SiteData | null>(null);
+  const [showScript, setShowScript] = useState(false);
 
   useEffect(() => {
     if (!siteId) return;
@@ -64,7 +64,7 @@ export default function AnalyticsPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
-  });
+      });
     });
 
     socket.on('connect_error', (err) => {
@@ -83,10 +83,7 @@ export default function AnalyticsPage() {
 
     const fetchSiteInfo = async () => {
       const res = await fetchWithLoader<SiteData>(`/api/sites/${siteId}`);
-      
-      
-        setSiteInfo(res);
-      
+      setSiteInfo(res);
     };
 
     fetchSiteInfo();
@@ -94,14 +91,40 @@ export default function AnalyticsPage() {
 
   return (
     <div className="p-6 min-h-screen bg-black text-white">
-      <div className="w-full rounded-xl bg-gradient-to-br from-[#111827] via-[#1f2937] to-[#0f172a] p-4 mb-6 shadow-md border border-[#2a2e36]">
+      {/* Site Header with Script Button */}
+      <div className="w-full rounded-xl bg-gradient-to-br from-[#111827] via-[#1f2937] to-[#0f172a] p-4 mb-6 shadow-md border border-[#2a2e36] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-white tracking-wide">
-          <p className="ml-2 inline-block text-indigo-400 font-bold px-3 py-1">
+          <span className="ml-2 inline-block text-indigo-400 font-bold px-3 py-1">
             {siteInfo?.site?.site_name}
-          </p>
+          </span>
         </h2>
+
+        <button
+          onClick={() => setShowScript((prev) => !prev)}
+          className={`
+            group flex items-center gap-2 px-3 py-2 rounded-md
+            bg-purple-700 hover:bg-purple-800 text-white font-small
+            transition-all duration-300 ease-in-out shadow-md
+            hover:scale-105
+          `}
+        >
+          <Eye size={18} />
+          <span
+            className="max-w-0 overflow-hidden group-hover:max-w-xs group-hover:ml-2 transition-all duration-300 ease-in-out whitespace-nowrap"
+          >
+            View Tracking Script
+          </span>
+        </button>
       </div>
-      <TrackerEmbed userId={user as string} siteId={siteId as string} />
+
+      {/* Script block toggle */}
+      {showScript && (
+        <div className="mb-6">
+          <TrackerEmbed userId={user as string} siteId={siteId as string} />
+        </div>
+      )}
+
+      {/* Analytics Overview */}
       <AnalyticsOverview
         totalUsers={siteInfo?.total_users || 0}
         activeUsers={siteInfo?.active_users || 0}

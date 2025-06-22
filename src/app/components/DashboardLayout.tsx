@@ -20,7 +20,7 @@ export default function DashboardLayout({
     { name: 'Home', path: '/', icon: Home },
     { name: 'Dashboard', path: `/dashboard/${userId}`, icon: LayoutDashboard },
     { name: 'Add Sites', path: `/dashboard/${userId}/sites`, icon: PlusSquare },
-    { name: 'Settings', path: '/dashboard/settings', icon: Settings },
+    { name: 'Settings', path: `/dashboard/${userId}/settings`, icon: Settings },
   ], [userId]);
 
   return (

@@ -2,16 +2,12 @@
 
 import { useState } from 'react';
 import {FaGoogle } from 'react-icons/fa';
-import { useTheme } from 'next-themes'; // if you're using next-themes
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { theme } = useTheme(); // optional, to adapt colors programmatically
-  const router = useRouter();
+
 
   const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault();

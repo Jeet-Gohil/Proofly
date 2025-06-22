@@ -2,9 +2,6 @@ import React from 'react';
 import { FaStar } from 'react-icons/fa';
 import { FaCrown } from 'react-icons/fa6';
 import { HiOutlineUserGroup } from 'react-icons/hi';
-import HotStreaksSection from '../components/StreakSection';
-import LiveVisitorCount from '../components/LiveVisitors';
-import RecentActivitySection from '../components/RecentActivitySection';
 import Link from 'next/link';
 import HowItWorks from '../components/HowItWorks';
 
