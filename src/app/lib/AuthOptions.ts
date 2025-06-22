@@ -174,7 +174,7 @@ export const authOptions: NextAuthOptions = {
       }
     },
     async redirect() {
-      return 'http://localhost:3000/callback'
+      return 'https://proofly-delta.vercel.app/callback
     },
     
   },
