@@ -7,6 +7,25 @@ import AnalyticsOverview from '@/app/components/AnalyticsOverview';
 import TrackerEmbed from '@/app/components/ScriptDisplay';
 import { Eye } from 'lucide-react';
 import { fetchWithLoader } from '@/app/lib/FetchWithLoader';
+import ChartDisplaySection from '@/app/components/ChartDisplay';
+
+const visitsData = [
+  { date: '2025-06-01', visits: 40 },
+  { date: '2025-06-02', visits: 60 },
+  { date: '2025-06-03', visits: 30 },
+];
+
+const deviceData = [
+  { device: 'Desktop', percentage: 55 },
+  { device: 'Mobile', percentage: 35 },
+  { device: 'Tablet', percentage: 10 },
+];
+
+const topPagesData = [
+  { page: '/home', views: 100 },
+  { page: '/pricing', views: 80 },
+  { page: '/features', views: 60 },
+];
 
 interface PageViewData {
   siteId: string;
@@ -30,6 +49,12 @@ interface SiteData {
   active_users: number;
 }
 
+interface visitsLine {
+  ok : any;
+  date : string;
+  visits : number;
+}
+
 let socket: Socket | null = null;
 
 export default function AnalyticsPage() {
@@ -37,6 +62,7 @@ export default function AnalyticsPage() {
   const [views, setViews] = useState<PageViewData[]>([]);
   const [siteInfo, setSiteInfo] = useState<SiteData | null>(null);
   const [showScript, setShowScript] = useState(false);
+  const [Visits, SetVisits] = useState<visitsLine[]>([]);
 
   useEffect(() => {
     if (!siteId) return;
@@ -89,6 +115,15 @@ export default function AnalyticsPage() {
     fetchSiteInfo();
   }, [siteId]);
 
+  useEffect(() => {
+    const fetchAnalytics = async() => {
+      const visits = await fetchWithLoader<visitsLine[]>(`/api/sites/${siteId}/Analytics/VisitsVsDate`)
+      SetVisits(visits);
+    };
+    fetchAnalytics();
+    }, []);
+
+
   return (
     <div className="p-6 min-h-screen bg-black text-white">
       {/* Site Header with Script Button */}
@@ -134,6 +169,14 @@ export default function AnalyticsPage() {
           timestamp: v.timestamp,
         }))}
       />
+      {/* Chartings*/}
+      <div className='pt-4 pb-4'>
+            <ChartDisplaySection
+        visitsData={Visits}
+        deviceData={deviceData}
+        topPagesData={topPagesData}
+      />
+      </div>
     </div>
   );
 }
