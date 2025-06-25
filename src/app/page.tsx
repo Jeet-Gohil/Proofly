@@ -3,9 +3,12 @@ import Link from "next/link";
 import { DraggableCardDemo } from "./components/ui/DraggableCards";
 import { SVGMaskEffectDemo } from "./components/ui/Mask-Effect";
 import React from "react";
-import ProofSignup from "./components/PhoneHeroSection";
 import MosaicImage from "@/components/ui/Mosaic-Image";
 import { CardHoverEffectDemo } from "./components/ui/CardHoverEffect";
+import Hero from "./components/PhoneHeroSection";
+import { BackgroundLines } from "@/components/ui/BackgroundLine";
+
+
 
 
 export default function Home() {
@@ -16,10 +19,14 @@ export default function Home() {
         {/* Background Gradient Blobs (Desktop Only) */}
         <div className="hidden md:block absolute inset-0 z-0 pointer-events-none ">  
          </div>
+        
 
         {/* Desktop Content */}
-         <div className="relative z-10 hidden md:grid max-w-6xl mx-auto grid-cols-2 items-center gap-15 py-2 px-1">
-          <div className="space-y-4">
+        <BackgroundLines className="flex items-center justify-center w-full flex-col px-4">
+  {/* ✅ This content will be automatically passed as `children` */}
+          <div className="relative z-10 hidden md:grid max-w-6xl mx-auto grid-cols-2 items-center gap-15 py-2 px-1">
+    {/* content */}
+    <div className="space-y-4">
             <SVGMaskEffectDemo />
             <p className="text-sm text-gray-300 mt-4">
               <span className="text-green-400 font-semibold">1,000+ people</span> started a free trial in the last 30 days
@@ -33,10 +40,14 @@ export default function Home() {
               </div>
               </div>
           </div>
-        </div> 
+          </div>
+
+             
+        </BackgroundLines>
+
 
         {/* Mobile Only Title & Subtitle */}
-        <ProofSignup/>
+        <Hero/>
       </section>
 
       {/* Trusted Section — Show on all screens */}

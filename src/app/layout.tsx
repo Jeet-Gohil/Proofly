@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Footer from "./components/Footer";
-import Navbar from "./components/Navbar";
+ 
 import { Providers } from "./providers";
 import LoadingOverlay from "./components/RouteLoader";
+import { ThemeProvider } from "next-themes";
+import Navbar from "./components/Navbar";
 
 
 export const metadata: Metadata = {
@@ -17,21 +19,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
           {/*local pg script */}
           {/* <script src="http://localhost:3000/api/Tracker" data-user-id="ac51341c-578f-4cd6-91a9-87a939489215" data-site-id="39b858b9-f2fe-4cfd-b34b-e4b6a2a7e389"></script>    */}
           {/* <script src="https://proofly-delta.vercel.app/api/Tracker" data-user-id="5e6bcd29-77c8-4dbe-a28b-1c8986fc8694" data-site-id="326e568b-445e-44a3-a182-e6e756d9c37e"></script>    */}
       </head>
       <body>
-       
+       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <Providers>
           <Navbar/>
           <LoadingOverlay/>
         {children}
         <Footer/>
         </Providers>
-        
+        </ThemeProvider>
       </body>
     </html>
   );

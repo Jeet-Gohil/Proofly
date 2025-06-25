@@ -20,7 +20,7 @@ export function SVGMaskEffectDemo() {
                           </p>
                           <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6">
                 Boost your website <br />
-                conversions by <span className="text-white">15% in</span> <br />
+                conversions by <span className="text-violet-500 ">15% in</span> <br />
                 under 15 minutes
               </h1>
                           <div className="text-[#99ABCE] mb-8">

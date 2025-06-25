@@ -1,55 +1,77 @@
-import React from "react";
-import { useRouter } from "next/navigation";
-import { TextGenerateEffectDemo } from "./ui/GenerateText";
+'use client'
 
-const ProofSignup = () => {
-  const route = useRouter();
+import { motion } from 'framer-motion'
+import { useTheme } from 'next-themes'
+import { useState, useEffect } from 'react'
+import { Sun, Moon, Rocket } from 'lucide-react'
+import { TextGenerateEffectDemo } from './ui/GenerateText'
+import { BackgroundLines } from '@/components/ui/Background-Lines'
 
-  const OnClick = ()=> {
-    route.push('/SignUp');
-  }
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+}
+
+export default function Hero() {
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => setMounted(true), [])
+
+  if (!mounted) return null // Prevent hydration mismatch
 
   return (
-    // hidden on md (768px) and up
-    <div className="block md:hidden min-h-screen bg-[#0b063f] text-white flex flex-col justify-center px-6 py-10 space-y-6">
-      <div className="text-sm text-gray-300 flex items-center space-x-2">
-        <span role="img" aria-label="wave">👋</span>
-        <span>Welcome to Proofly.</span>
-      </div>
+    <section className="min-h-screen flex items-center justify-center px-4 py-10 bg-background transition-colors duration-300">
+      <motion.div
+        className="w-full max-w-md text-center space-y-6"
+        initial="hidden"
+        animate="visible"
+        variants={fadeUp}
+      >
+        
 
-      <h1 className="text-3xl font-bold leading-snug">
+        <motion.p className="text-sm text-muted-foreground">
+          👋 Welcome to Proofly.
+        </motion.p>
+
+         <h1 className="text-3xl font-bold leading-snug">
         <TextGenerateEffectDemo/>
       </h1>
 
-      <p className="text-gray-400 text-base">
-        We believe customer-obsessed marketing is the best kind of marketing.
-        Proof makes it easy. Make your website delightfully human.
-      </p>
+        <motion.p className="text-sm text-muted-foreground px-4">
+          Customer-obsessed marketing is the future. Proofly makes your website feel
+          delightfully human.
+        </motion.p>
 
-      <div className="space-y-4">
-        <input
-          type="email"
-          placeholder="Enter work email..."
-          className="w-full px-4 py-3 rounded-md bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <button onClick={OnClick} className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md font-semibold transition duration-200">
-          Get Started
-        </button>
-      </div>
+        <motion.form
+          onSubmit={(e) => {
+            e.preventDefault()
+            alert('Get Started clicked')
+          }}
+          className="flex flex-col gap-3 w-full"
+        >
+          <input
+            type="email"
+            placeholder="Enter work email..."
+            className="px-4 py-3 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+            required
+          />
+          <button
+            type="submit"
+            className="bg-primary hover:bg-primary/90 text-gray-500 font-medium py-3 rounded-lg transition-all flex items-center justify-center gap-2"
+          >
+            <Rocket size={16} />
+            Get Started
+          </button>
+        </motion.form>
 
-      <div className="flex items-center space-x-2 pt-4">
-        <div className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-sm font-semibold flex items-center space-x-1">
-          <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10 2a8 8 0 018 8v1a8 8 0 11-16 0v-1a8 8 0 018-8zM9 9v3a1 1 0 102 0V9a1 1 0 10-2 0z" />
-          </svg>
-          <span>1,000+</span>
-        </div>
-        <span className="text-sm text-gray-400">
+        <motion.div className="text-xs text-muted-foreground mt-2">
+          <span className="inline-flex items-center gap-1 bg-green-100 dark:bg-green-800/30 text-green-700 dark:text-green-300 px-2 py-1 rounded-full text-[11px] font-medium">
+            ✅ 1,000+
+          </span>{' '}
           people started a free trial in the last 30 days
-        </span>
-      </div>
-    </div>
-  );
-};
-
-export default ProofSignup;
+        </motion.div>
+      </motion.div>
+    </section>
+  )
+}
