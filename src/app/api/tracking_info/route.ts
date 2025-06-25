@@ -12,18 +12,17 @@ export async function POST(req : NextRequest) {
     path,
     referrer,
     timestamp,
-    user_agent,
-    ip_address
+    userAgent,
+    ip
   } = data;
-  console.log(data);
-   const ip = req.headers.get('x-forwarded-for') || 'unknown';
-  const userAgent = req.headers.get('user-agent') || 'unknown';
+  
+   
   const res = pool.query('INSERT INTO page_views (site_id, user_id, session_id, ip_address, user_agent, path, referrer, timestamp) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING*', [
     siteId,
     userId,
     sessionId,
-    ip_address,
-    user_agent,
+    ip,
+    userAgent,
     path,
     referrer,
     timestamp,

@@ -2,20 +2,16 @@
 
 import { useState, useMemo } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import { Home, Settings, PlusSquare, LayoutDashboard, Menu } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { Home, Settings, PlusSquare, LayoutDashboard } from 'lucide-react';
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const [hovered, setHovered] = useState(false);
   const router = useRouter();
   const params = useParams();
-  const userId = params.user as string; // Extracted from URL like /dashboard/[user]/...
+  const userId = params.user as string;
 
-  // Dynamically create nav items once userId is available
   const navItems = useMemo(() => [
     { name: 'Home', path: '/', icon: Home },
     { name: 'Dashboard', path: `/dashboard/${userId}`, icon: LayoutDashboard },
@@ -24,45 +20,49 @@ export default function DashboardLayout({
   ], [userId]);
 
   return (
-    <div className="flex h-screen bg-black text-white">
-      {/* Sidebar */}
-      <aside
-        className={cn(
-          'bg-zinc-900 w-64 px-6 py-8 space-y-6 absolute inset-y-0 left-0 z-30 transform lg:relative lg:translate-x-0 transition duration-200 ease-in-out',
-          {
-            '-translate-x-full': !sidebarOpen,
-          }
-        )}
+    <div className="flex h-screen bg-black text-white relative overflow-hidden">
+      {/* Hover trigger */}
+      <div
+        onMouseEnter={() => setHovered(true)}
+        className="fixed top-1/2 -translate-y-1/2 left-0 z-50 p-2 cursor-pointer"
       >
-        <h1 className="text-2xl font-bold text-indigo-400">Welcome </h1>
-        <nav className="flex flex-col gap-2">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <button
-                key={item.name}
-                onClick={() => router.push(item.path)}
-                className="flex items-center gap-3 text-left px-4 py-2 rounded hover:bg-indigo-600 transition text-white"
-              >
-                <Icon size={18} />
-                {item.name}
-              </button>
-            );
-          })}
-        </nav>
-      </aside>
+        <Menu className="text-white opacity-50 hover:opacity-100" />
+      </div>
 
-      {/* Backdrop on mobile */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
+      {/* Sidebar */}
+      <AnimatePresence>
+        {hovered && (
+          <motion.aside
+            onMouseLeave={() => setHovered(false)}
+            initial={{ x: -256 }}
+            animate={{ x: 0 }}
+            exit={{ x: -256 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            className="fixed top-0 left-0 z-40 h-full w-64 bg-zinc-900 px-6 py-8 space-y-6 shadow-lg"
+          >
+            <h1 className="text-2xl font-bold text-indigo-400">Welcome</h1>
+            <nav className="flex flex-col gap-2">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.name}
+                    onClick={() => router.push(item.path)}
+                    className="flex items-center gap-3 text-left px-4 py-2 rounded hover:bg-indigo-600 transition text-white"
+                  >
+                    <Icon size={18} />
+                    {item.name}
+                  </button>
+                );
+              })}
+            </nav>
+          </motion.aside>
+        )}
+      </AnimatePresence>
 
-      {/* Main content */}
+      {/* Main content area */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        <main className="flex-1 overflow-y-auto p-6 bg-gradient-to-tr from-black via-zinc-900 to-black">
+        <main className="flex-1 overflow-y-auto p-6 bg-gradient-to-tr from-black via-zinc-900 to-black transition-all duration-300">
           {children}
         </main>
       </div>

@@ -1,225 +1,228 @@
-'use client';
 
-import React, { useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+'use client'
 
-export default function AddSiteForm() {
-  const [formData, setFormData] = useState({
+import { useState } from 'react'
+import { motion } from 'framer-motion'
+import toast, { Toaster } from 'react-hot-toast'
+import { Loader2, CheckCircle, XCircle } from 'lucide-react'
+
+const fadeIn = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+}
+
+interface SiteFormData {
+  email: string
+  site_url: string
+  site_name: string
+  type_of_site: string
+  tags: string
+  status: string
+  description: string
+  domain_verified: boolean
+  geo_tracking_enabled: boolean
+  logo_url: string
+}
+
+const AddSiteForm = () => {
+  const [loading, setLoading] = useState(false)
+  const [form, setForm] = useState<SiteFormData>({
     email: '',
     site_url: '',
     site_name: '',
-    description: '',
-    tracking_type: 'visits',
-    domain_verified: false,
-    tracking_script_injected: false,
-    geo_tracking_enabled: false,
-    logo_url: '',
+    type_of_site: '',
     tags: '',
     status: 'active',
-  });
+    description: '',
+    domain_verified: false,
+    geo_tracking_enabled: false,
+    logo_url: '',
+  })
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-   const handleChange = (
+  const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
-    const { name, value, type } = e.target;
-
-    setFormData({
-      ...formData,
+    const { name, value, type } = e.target
+    setForm({
+      ...form,
       [name]: type === 'checkbox'
         ? (e.target as HTMLInputElement).checked
-        : value,
-    });
-  };
+        : value
+    })
+  }
 
-  
-   const handleSubmit = async (e: React.FormEvent) => {
-       e.preventDefault()
-   
-       // Send form data to backend API
-       try {
-         const response = await fetch('/api/sites', {
-           method: 'POST',
-           headers: {
-             'Content-Type': 'application/json',
-           },
-           body: JSON.stringify(formData),
-         });
-         const data = await response.json();
-         const siteId = data.siteId;
-         console.log(siteId);
-   
-   
-   
-         if (!response.ok) {
-           throw new Error('Failed to submit the site data.')
-         }
-         toast.success('✅ Your site has been successfully registered!', {
-        position: 'top-center',
-      });
-         
-         // Handle success (e.g., show a success message or redirenct)
-       } catch (error) {
-         console.error('Error:', error)
-          toast.error('❌ Something went wrong!');
-         // Handle error (e.g., show an error message)
-       }
-     }
-  
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+
+    try {
+      const res = await fetch('/api/sites', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+
+      const data = await res.json()
+
+      if (res.ok) {
+        toast.success(
+          <div className="flex items-center gap-2">
+            <CheckCircle className="text-green-500" /> Site created successfully!
+          </div>
+        )
+        setForm({
+          email: '',
+          site_url: '',
+          site_name: '',
+          type_of_site: '',
+          tags: '',
+          status: 'active',
+          description: '',
+          domain_verified: false,
+          geo_tracking_enabled: false,
+          logo_url: '',
+        })
+      } else {
+        toast.error(
+          <div className="flex items-center gap-2">
+            <XCircle className="text-red-500" /> {data.error || 'Failed to create site'}
+          </div>
+        )
+      }
+    } catch (error) {
+      toast.error(
+        <div className="flex items-center gap-2">
+          <XCircle className="text-red-500" /> Something went wrong
+        </div>
+      )
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
-    <>
-    <Toaster/>
-    <div className="bg-[#1f1f1f] text-white p-6 rounded-2xl shadow-md max-w-3xl w-full mx-auto">
-      <h2 className="text-2xl font-bold mb-6">Add a New Site</h2>
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label className="block text-sm mb-1">Email</label>
-          <input
-            type="email"
-            name="email"
-            required
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full px-4 py-2 rounded-lg bg-[#2a2a2a] border border-gray-700"
-            placeholder= "Please enter logged in Email"
-          />
+    <motion.div
+      className="max-w-4xl mx-auto p-6"
+      initial="hidden"
+      animate="visible"
+      variants={fadeIn}
+    >
+      <Toaster position="top-right" />
+      <h2 className="text-3xl font-bold text-white mb-6">Add a New Site</h2>
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 text-white">
+        <input
+          type="email"
+          name="email"
+          placeholder="Enter your email"
+          className="bg-black border border-gray-700 p-3 rounded"
+          value={form.email}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="url"
+          name="site_url"
+          placeholder="https://example.com"
+          className="bg-black border border-gray-700 p-3 rounded"
+          value={form.site_url}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="site_name"
+          placeholder="e.g. My Portfolio"
+          className="bg-black border border-gray-700 p-3 rounded"
+          value={form.site_name}
+          onChange={handleChange}
+        />
+        <select
+          name="type_of_site"
+          className="bg-black border border-gray-700 p-3 rounded"
+          value={form.type_of_site}
+          onChange={handleChange}
+        >
+          <option value="">Select type</option>
+          <option value="portfolio">Portfolio</option>
+          <option value="blog">Blog</option>
+          <option value="ecommerce">E-commerce</option>
+        </select>
+        <input
+          type="text"
+          name="tags"
+          placeholder="e.g. startup, tech"
+          className="bg-black border border-gray-700 p-3 rounded"
+          value={form.tags}
+          onChange={handleChange}
+        />
+        <select
+          name="status"
+          className="bg-black border border-gray-700 p-3 rounded"
+          value={form.status}
+          onChange={handleChange}
+        >
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+
+        <input
+          type="text"
+          name="logo_url"
+          placeholder="Logo URL"
+          className="bg-black border border-gray-700 p-3 rounded col-span-full"
+          value={form.logo_url}
+          onChange={handleChange}
+        />
+
+        <textarea
+          name="description"
+          placeholder="Describe your site..."
+          rows={4}
+          className="bg-black border border-gray-700 p-3 rounded col-span-full"
+          value={form.description}
+          onChange={handleChange}
+        />
+
+        <div className="flex items-center gap-4 col-span-full">
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              name="domain_verified"
+              checked={form.domain_verified}
+              onChange={handleChange}
+            />
+            Domain Verified
+          </label>
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              name="geo_tracking_enabled"
+              checked={form.geo_tracking_enabled}
+              onChange={handleChange}
+            />
+            Geo Tracking Enabled
+          </label>
         </div>
 
-        <div>
-          <label className="block text-sm mb-1">Site URL</label>
-          <input
-            type="url"
-            name="site_url"
-            required
-            value={formData.site_url}
-            onChange={handleChange}
-            className="w-full px-4 py-2 rounded-lg bg-[#2a2a2a] border border-gray-700"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm mb-1">Site Name</label>
-          <input
-            type="text"
-            name="site_name"
-            required
-            value={formData.site_name}
-            onChange={handleChange}
-            className="w-full px-4 py-2 rounded-lg bg-[#2a2a2a] border border-gray-700"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm mb-1">Tracking Type</label>
-          <select
-            name="tracking_type"
-            value={formData.tracking_type}
-            onChange={handleChange}
-            className="w-full px-4 py-2 rounded-lg bg-[#2a2a2a] border border-gray-700"
-          >
-            <option value="visits">Visits</option>
-            <option value="heatmap">Heatmap</option>
-            <option value="realtime">Real-time</option>
-          </select>
-        </div>
-
-        <div className="md:col-span-2">
-          <label className="block text-sm mb-1">Description</label>
-          <textarea
-            name="description"
-            required
-            value={formData.description}
-            onChange={handleChange}
-            className="w-full px-4 py-2 rounded-lg bg-[#2a2a2a] border border-gray-700"
-            rows={3}
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm mb-1">Logo URL</label>
-          <input
-            type="url"
-            name="logo_url"
-            value={formData.logo_url}
-            onChange={handleChange}
-            placeholder="https://example.com/logo.png"
-            className="w-full px-4 py-2 rounded-lg bg-[#2a2a2a] border border-gray-700"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm mb-1">Tags (comma-separated)</label>
-          <input
-            type="text"
-            name="tags"
-            value={formData.tags}
-            onChange={handleChange}
-            placeholder='e.g. {"start-ups"}'
-            className="w-full px-4 py-2 rounded-lg bg-[#2a2a2a] border border-gray-700"
-          />
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <input
-            type="checkbox"
-            name="domain_verified"
-            checked={formData.domain_verified}
-            onChange={handleChange}
-            className="w-5 h-5 accent-blue-500"
-          />
-          <label className="text-sm">Domain Verified</label>
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <input
-            type="checkbox"
-            name="tracking_script_injected"
-            checked={formData.tracking_script_injected}
-            onChange={handleChange}
-            className="w-5 h-5 accent-blue-500"
-          />
-          <label className="text-sm">Tracking Script Injected</label>
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <input
-            type="checkbox"
-            name="geo_tracking_enabled"
-            checked={formData.geo_tracking_enabled}
-            onChange={handleChange}
-            className="w-5 h-5 accent-blue-500"
-          />
-          <label className="text-sm">Geo Tracking Enabled</label>
-        </div>
-
-        <div>
-          <label className="block text-sm mb-1">Status</label>
-          <select
-            name="status"
-            value={formData.status}
-            onChange={handleChange}
-            className="w-full px-4 py-2 rounded-lg bg-[#2a2a2a] border border-gray-700"
-          >
-            <option value="active">Active</option>
-            <option value="paused">Paused</option>
-            <option value="archived">Archived</option>
-          </select>
-        </div>
-
-        <div className="md:col-span-2">
+        <div className="col-span-full">
           <button
-          onClick={handleSubmit}
             type="submit"
-            disabled={isSubmitting}
-            className="w-full py-3 px-4 mt-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all"
+            disabled={loading}
+            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded font-semibold flex items-center justify-center gap-2"
           >
-            {isSubmitting ? 'Submitting...' : 'Add Site'}
+            {loading ? (
+              <>
+                <Loader2 className="animate-spin" /> Submitting...
+              </>
+            ) : (
+              'Submit Site'
+            )}
           </button>
         </div>
       </form>
-    </div>
-    </>
-  );
+    </motion.div>
+  )
 }
+
+export default AddSiteForm

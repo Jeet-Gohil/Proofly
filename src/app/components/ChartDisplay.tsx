@@ -33,9 +33,9 @@ const ChartDisplaySection: FC<ChartDisplaySectionProps> = ({ visitsData, deviceD
   const [isCarousel, setIsCarousel] = useState(false);
 
   const charts = [
-    { title: '📈 Website Visits Over Time', component: <VisitsLineChart key="line" data={visitsData} /> },
-    { title: '📱 Device Distribution', component: <DevicePieChart key="pie" data={deviceData} /> },
-    { title: '📊 Top Performing Pages', component: <TopPagesBar key="bar" data={topPagesData} /> },
+    { title: ' Website Visits Over Time', component: <VisitsLineChart key="line" data={visitsData} /> },
+    { title: ' Device Distribution', component: <DevicePieChart key="pie" data={deviceData} /> },
+    { title: ' Top Performing Pages', component: <TopPagesBar key="bar" data={topPagesData} /> },
   ];
 
   return (
@@ -43,7 +43,7 @@ const ChartDisplaySection: FC<ChartDisplaySectionProps> = ({ visitsData, deviceD
       <div className="flex justify-end">
         <button
           onClick={() => setIsCarousel(!isCarousel)}
-          className="flex items-center gap-2 px-4 py-2 text-sm rounded-lg bg-gradient-to-r from-indigo-600 to-purple-500 text-white hover:scale-105 transition transform"
+          className="flex items-center gap-2 px-4 py-2 text-sm rounded-lg bg-gray-900 text-white hover:scale-105 transition transform"
         >
           <MonitorPlay className="w-4 h-4" />
           {isCarousel ? 'Grid View' : 'Carousel View'}
@@ -79,28 +79,53 @@ const ChartDisplaySection: FC<ChartDisplaySectionProps> = ({ visitsData, deviceD
           </motion.div>
         ) : (
           <motion.div
-            key="grid"
-            className="grid grid-cols-1 gap-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            {charts.map(({ title, component }, index) => (
-              <motion.div
-                key={index}
-                className="p-4 rounded-xl bg-white/90 dark:bg-zinc-900 shadow-md backdrop-blur-md"
-                initial="hidden"
-                animate="visible"
-                variants={fadeInUp}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-              >
-                <h2 className="text-xl font-bold mb-2">{title}</h2>
-                <p className="text-sm text-zinc-500 mb-2">Hover on points/bars for more info</p>
-                {component}
-              </motion.div>
-            ))}
-          </motion.div>
+  key="grid"
+  className="grid grid-cols-1 md:grid-cols-2 gap-6"
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  exit={{ opacity: 0 }}
+  transition={{ duration: 0.5 }}
+>
+  {/* Line Chart */}
+  <motion.div
+    className="p-4 rounded-xl bg-white/90 dark:bg-zinc-900 shadow-md backdrop-blur-md"
+    initial="hidden"
+    animate="visible"
+    variants={fadeInUp}
+    transition={{ duration: 0.4, delay: 0 }}
+  >
+    <h2 className="text-xl font-bold mb-2">Website Visits Over Time</h2>
+    <p className="text-sm text-zinc-500 mb-2">Hover on points/bars for more info</p>
+    <VisitsLineChart data={visitsData} />
+  </motion.div>
+
+  {/* Pie Chart */}
+  <motion.div
+    className="p-4 rounded-xl bg-white/90 dark:bg-zinc-900 shadow-md backdrop-blur-md"
+    initial="hidden"
+    animate="visible"
+    variants={fadeInUp}
+    transition={{ duration: 0.4, delay: 0.1 }}
+  >
+    <h2 className="text-xl font-bold mb-2">Device Distribution</h2>
+    <p className="text-sm text-zinc-500 mb-2">Hover on points/bars for more info</p>
+    <DevicePieChart data={deviceData} />
+  </motion.div>
+
+  {/* Bar Chart - full width */}
+  <motion.div
+    className="p-4 rounded-xl bg-white/90 dark:bg-zinc-900 shadow-md backdrop-blur-md md:col-span-2"
+    initial="hidden"
+    animate="visible"
+    variants={fadeInUp}
+    transition={{ duration: 0.4, delay: 0.2 }}
+  >
+    <h2 className="text-xl font-bold mb-2">Top Performing Pages</h2>
+    <p className="text-sm text-zinc-500 mb-2">Hover on points/bars for more info</p>
+    <TopPagesBar data={topPagesData} />
+  </motion.div>
+</motion.div>
+
         )}
       </AnimatePresence>
     </motion.div>

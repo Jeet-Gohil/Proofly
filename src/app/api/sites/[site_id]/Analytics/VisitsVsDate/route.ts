@@ -1,8 +1,17 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import pool from "@/app/lib/db";
 
-export async function GET(req: NextRequest,  context: { params: Promise<{ site_id: string }> }) {
-    const {site_id} = await context.params;
+
+function getSiteIdFromRequest(req: NextRequest): string | null {
+  const segments = new URL(req.url).pathname.split("/");
+  return segments[3] ?? null;
+}
+
+
+export async function GET(req: NextRequest) {
+   const site_id = getSiteIdFromRequest(req);
+      if (!site_id) return NextResponse.json({ error: "Missing site_id" }, { status: 400 });
+    
     const query = `
     SELECT 
       TO_CHAR(DATE(timestamp), 'Mon DD') AS date, 

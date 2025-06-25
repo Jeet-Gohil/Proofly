@@ -7,7 +7,8 @@ import AnalyticsOverview from '@/app/components/AnalyticsOverview';
 import TrackerEmbed from '@/app/components/ScriptDisplay';
 import { Eye } from 'lucide-react';
 import { fetchWithLoader } from '@/app/lib/FetchWithLoader';
-import ChartDisplaySection from '@/app/components/ChartDisplay';
+import AnalyticsWrapper from '@/app/components/AnalyticsWrapper';
+import DashboardHeader from '@/app/components/CurrentSiteHeader';
 
 const visitsData = [
   { date: '2025-06-01', visits: 40 },
@@ -27,6 +28,12 @@ const topPagesData = [
   { page: '/features', views: 60 },
 ];
 
+export interface DeviceData {
+  device: 'Desktop' | 'Mobile' | 'Tablet';
+  percentage: number;
+}
+
+
 interface PageViewData {
   siteId: string;
   path: string;
@@ -34,6 +41,7 @@ interface PageViewData {
   referrer: string;
   userId: string;
   ip_address: string;
+  user_agent : string;
   sessionId: string;
 }
 
@@ -55,6 +63,12 @@ interface visitsLine {
   visits : number;
 }
 
+interface TopPagesData {
+  ok : any;
+  page : string;
+  views : Number;
+}
+
 let socket: Socket | null = null;
 
 export default function AnalyticsPage() {
@@ -63,6 +77,9 @@ export default function AnalyticsPage() {
   const [siteInfo, setSiteInfo] = useState<SiteData | null>(null);
   const [showScript, setShowScript] = useState(false);
   const [Visits, SetVisits] = useState<visitsLine[]>([]);
+  const [TopPages, setTopPages] = useState<TopPagesData[]>([]);
+  const [Device, setDevice] = useState<DeviceData[]>([]);
+  
 
   useEffect(() => {
     if (!siteId) return;
@@ -80,7 +97,7 @@ export default function AnalyticsPage() {
 
     socket.on('live_view', async (data: PageViewData) => {
       if (data.siteId !== siteId) return;
-
+      console.log(data);
       setViews((prev) => {
         const updated = [data, ...prev];
         return updated.slice(0, 5);
@@ -117,48 +134,24 @@ export default function AnalyticsPage() {
 
   useEffect(() => {
     const fetchAnalytics = async() => {
-      const visits = await fetchWithLoader<visitsLine[]>(`/api/sites/${siteId}/Analytics/VisitsVsDate`)
-      SetVisits(visits);
+      const visits = await fetchWithLoader<visitsLine[]>(`/api/sites/${siteId}/Analytics/VisitsVsDate`);
+      const device = await fetchWithLoader<DeviceData[]>(`/api/sites/${siteId}/Analytics/DeviceType`);
+        SetVisits(visits);
+        setDevice(device);
     };
     fetchAnalytics();
     }, []);
 
+   
+
+    console.log(TopPages);
+
 
   return (
     <div className="p-6 min-h-screen bg-black text-white">
-      {/* Site Header with Script Button */}
-      <div className="w-full rounded-xl bg-gradient-to-br from-[#111827] via-[#1f2937] to-[#0f172a] p-4 mb-6 shadow-md border border-[#2a2e36] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-white tracking-wide">
-          <span className="ml-2 inline-block text-indigo-400 font-bold px-3 py-1">
-            {siteInfo?.site?.site_name}
-          </span>
-        </h2>
-
-        <button
-          onClick={() => setShowScript((prev) => !prev)}
-          className={`
-            group flex items-center gap-2 px-3 py-2 rounded-md
-            bg-purple-700 hover:bg-purple-800 text-white font-small
-            transition-all duration-300 ease-in-out shadow-md
-            hover:scale-105
-          `}
-        >
-          <Eye size={18} />
-          <span
-            className="max-w-0 overflow-hidden group-hover:max-w-xs group-hover:ml-2 transition-all duration-300 ease-in-out whitespace-nowrap"
-          >
-            View Tracking Script
-          </span>
-        </button>
-      </div>
-
-      {/* Script block toggle */}
-      {showScript && (
-        <div className="mb-6">
-          <TrackerEmbed userId={user as string} siteId={siteId as string} />
-        </div>
-      )}
-
+      <DashboardHeader siteName={siteInfo?.site?.site_name as string} 
+      trackingScriptComponent={<TrackerEmbed userId={user as string} siteId={siteId as string}/>}/>
+    
       {/* Analytics Overview */}
       <AnalyticsOverview
         totalUsers={siteInfo?.total_users || 0}
@@ -171,11 +164,7 @@ export default function AnalyticsPage() {
       />
       {/* Chartings*/}
       <div className='pt-4 pb-4'>
-            <ChartDisplaySection
-        visitsData={Visits}
-        deviceData={deviceData}
-        topPagesData={topPagesData}
-      />
+        <AnalyticsWrapper visitsData={Visits} deviceData={Device} topPagesData={topPagesData}/>
       </div>
     </div>
   );
