@@ -5,10 +5,23 @@ import { useParams } from 'next/navigation';
 import io, { Socket } from 'socket.io-client';
 import AnalyticsOverview from '@/app/components/AnalyticsOverview';
 import TrackerEmbed from '@/app/components/ScriptDisplay';
-import { Eye } from 'lucide-react';
 import { fetchWithLoader } from '@/app/lib/FetchWithLoader';
 import AnalyticsWrapper from '@/app/components/AnalyticsWrapper';
 import DashboardHeader from '@/app/components/CurrentSiteHeader';
+import dynamic from 'next/dynamic';
+
+const MapTracker = dynamic(() => import('@/app/components/GeoMap/GeoMap.client'), {
+  ssr: false,
+});
+
+
+interface GeoData {
+  latitude: number;
+  longitude: number;
+  city: string;
+  region: string;
+  country: string;
+}
 
 const visitsData = [
   { date: '2025-06-01', visits: 40 },
@@ -51,6 +64,7 @@ interface SiteData {
     site_id: string;
     site_name: string;
     domain: string;
+    Geo_track : boolean
   };
   total_users: number;
   total_visits: number;
@@ -69,6 +83,8 @@ interface TopPagesData {
   views : Number;
 }
 
+
+
 let socket: Socket | null = null;
 
 export default function AnalyticsPage() {
@@ -79,6 +95,7 @@ export default function AnalyticsPage() {
   const [Visits, SetVisits] = useState<visitsLine[]>([]);
   const [TopPages, setTopPages] = useState<TopPagesData[]>([]);
   const [Device, setDevice] = useState<DeviceData[]>([]);
+  const [liveGeo, setLiveGeo] = useState<GeoData[]>([]);
   
 
   useEffect(() => {
@@ -95,13 +112,28 @@ export default function AnalyticsPage() {
       socket?.emit('join_site', siteId);
     });
 
-    socket.on('live_view', async (data: PageViewData) => {
+    socket.on('live_view', async (data: PageViewData & { geo: GeoData }) => {
       if (data.siteId !== siteId) return;
       console.log(data);
+      setLiveGeo((prev) => [data.geo, ...prev].slice(0, 10));
       setViews((prev) => {
         const updated = [data, ...prev];
         return updated.slice(0, 5);
       });
+
+      const { latitude, longitude } = data.geo;
+      console.log(data.geo)
+
+  if (
+    typeof latitude === 'number' &&
+    typeof longitude === 'number' &&
+    !isNaN(latitude) &&
+    !isNaN(longitude)
+  ) {
+    setLiveGeo((prev) => [data.geo, ...prev].slice(0, 10));
+  } else {
+    console.warn('Invalid geo:', data.geo);
+  }
 
       await fetch('/api/tracking_info', {
         method: 'POST',
@@ -132,6 +164,8 @@ export default function AnalyticsPage() {
     fetchSiteInfo();
   }, [siteId]);
 
+  console.log(siteInfo?.site);
+
   useEffect(() => {
     const fetchAnalytics = async() => {
       const visits = await fetchWithLoader<visitsLine[]>(`/api/sites/${siteId}/Analytics/VisitsVsDate`);
@@ -144,7 +178,7 @@ export default function AnalyticsPage() {
 
    
 
-    console.log(TopPages);
+   
 
 
   return (
@@ -163,8 +197,11 @@ export default function AnalyticsPage() {
       />
       {/* Chartings*/}
       <div className='pt-4 pb-4'>
-        <AnalyticsWrapper visitsData={Visits} deviceData={Device} topPagesData={topPagesData}/>
+        <AnalyticsWrapper visitsData={Visits} deviceData={Device} topPagesData={topPagesData} liveLocations={liveGeo}/>
       </div>
+     
     </div>
   );
 }
+
+const test = []
