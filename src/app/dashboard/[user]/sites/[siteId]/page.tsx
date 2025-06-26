@@ -85,7 +85,7 @@ export default function AnalyticsPage() {
     if (!siteId) return;
 
     if (!socket) {
-      socket = io('https://proofly-socket-server-4.onrender.com', {
+      socket = io('https://proofly-socket-server-1.onrender.com', {
         transports: ['websocket'],
       });
     }
