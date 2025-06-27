@@ -61,7 +61,7 @@ export const MaskContainer = ({
           maskPosition: { duration: 0.15, ease: "linear" },
         }}
       >
-        <div className="absolute inset-0 z-0 h-full w-full bg-black opacity-50 dark:bg-white" />
+        <div className="absolute inset-0 z-0 h-full w-full bg-black opacity-50 dark:bg-[#0a0a0a]" />
         <div
           onMouseEnter={() => {
             setIsHovered(true);

@@ -7,6 +7,7 @@ import MosaicImage from "@/components/ui/Mosaic-Image";
 import { CardHoverEffectDemo } from "./components/ui/CardHoverEffect";
 import Hero from "./components/PhoneHeroSection";
 import { BackgroundLines } from "@/components/ui/BackgroundLine";
+import AnimatedJourney from "./components/TimeLine";
 
 
 
@@ -14,41 +15,34 @@ import { BackgroundLines } from "@/components/ui/BackgroundLine";
 export default function Home() {
   return (
     <div>
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#0a0a0a] via-[#121212] to-black text-white HeroSection bg-cover">
-        
-        {/* Background Gradient Blobs (Desktop Only) */}
-        <div className="hidden md:block absolute inset-0 z-0 pointer-events-none ">  
-         </div>
-        
+      
+      <section className="relative overflow-hidden bg-black text-white HeroSection bg-cover">
 
-        {/* Desktop Content */}
-        <BackgroundLines className="flex items-center justify-center w-full flex-col px-4">
-  {/* ✅ This content will be automatically passed as `children` */}
-          <div className="relative z-10 hidden md:grid max-w-6xl mx-auto grid-cols-2 items-center gap-15 py-2 px-1">
-    {/* content */}
-    <div className="space-y-4">
-            <SVGMaskEffectDemo />
-            <p className="text-sm text-gray-300 mt-4">
-              <span className="text-green-400 font-semibold">1,000+ people</span> started a free trial in the last 30 days
-            </p>
+  {/* ✅ BackgroundLines & Desktop Grid – Hidden on small screens */}
+  <div className="hidden md:block">
+    <BackgroundLines className="flex items-center justify-center w-full flex-col px-4">
+      <div className="relative z-10 grid max-w-6xl mx-auto grid-cols-2 items-center gap-15 py-2 px-1">
+        {/* Left */}
+        <div className="space-y-4">
+          <SVGMaskEffectDemo />
+          <p className="text-sm text-gray-300 mt-4">
+            <span className="text-green-400 font-semibold">1,000+ people</span> started a free trial in the last 30 days
+          </p>
+        </div>
+        {/* Right */}
+        <div className="relative">
+          <div className="object-cover rounded-[40px] shadow-2xl">
+            <AnimatedJourney />
           </div>
-          <div className="relative">
-            <div
-              className="object-cover rounded-[40px] shadow-2xl hover:scale-105 transition duration-500"> 
-              <div className="HeroSectionImage mb-20">
-                <MosaicImage src= "/HeroSection.png" gridSize={25}/>
-              </div>
-              </div>
-          </div>
-          </div>
+        </div>
+      </div>
+    </BackgroundLines>
+  </div>
 
-             
-        </BackgroundLines>
+  {/* ✅ Hero section for all screens, mostly visible on mobile */}
+  <Hero />
+</section>
 
-
-        {/* Mobile Only Title & Subtitle */}
-        <Hero/>
-      </section>
 
       {/* Trusted Section — Show on all screens */}
       <section className="text-center px-6 md:px-16 py-16 md:py-24 bg-white text-[#374151]">

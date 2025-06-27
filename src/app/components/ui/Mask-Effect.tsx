@@ -23,7 +23,7 @@ export function SVGMaskEffectDemo() {
                 conversions by <span className="text-violet-500 ">15% in</span> <br />
                 under 15 minutes
               </h1>
-                          <div className="text-[#99ABCE] mb-8">
+                          <div className="text-[#99ABCE] dark:text-gray-800 mb-8">
                             <div className="text-base">We believe customer-obsessed marketing is the best kind of marketing.
                   Proof makes it easy. Make your website delightfully human.</div>
                             <br />
