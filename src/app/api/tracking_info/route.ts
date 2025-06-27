@@ -27,6 +27,7 @@ export async function POST(req : NextRequest) {
     referrer,
     timestamp,
   ]);
+  console.log(res);
   return new Response('ok', { status: 200 });
 }
 
