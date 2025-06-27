@@ -16,7 +16,7 @@ export async function GET() {
   const socketScript = document.createElement('script');
   socketScript.src = "https://cdn.socket.io/4.7.2/socket.io.min.js";
   socketScript.onload = function () {
-    const socket = io('http://localhost:3001', {
+    const socket = io('https://proofly-socket-server-1.onrender.com', {
       transports: ['websocket'],
     });
 

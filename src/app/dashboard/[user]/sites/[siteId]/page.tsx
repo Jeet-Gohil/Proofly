@@ -102,7 +102,7 @@ export default function AnalyticsPage() {
     if (!siteId) return;
 
     if (!socket) {
-      socket = io('http://localhost:3001', {
+      socket = io('https://proofly-socket-server-1.onrender.com', {
         transports: ['websocket'],
       });
     }
@@ -175,6 +175,11 @@ export default function AnalyticsPage() {
     };
     fetchAnalytics();
     }, []);
+
+   
+
+   
+
 
   return (
     <div className="p-6 min-h-screen bg-black text-white">
