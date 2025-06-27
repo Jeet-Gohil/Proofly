@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { motion } from "motion/react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
 export const MaskContainer = ({
   children,
@@ -9,6 +9,7 @@ export const MaskContainer = ({
   size = 5,
   revealSize = 600,
   className,
+  
 }: {
   children?: string | React.ReactNode;
   revealText?: string | React.ReactNode;

@@ -5,19 +5,19 @@ export function TypewriterEffectDemo() {
   const words = [
     {
       text: "Welcome",
-      className: 'text-gray-400'
+      className: 'text-gray-900'
     },
     {
       text: "to",
-      className: 'text-gray-400'
+      className: 'text-gray-900'
     },
     {
       text: "the",
-      className: 'text-gray-400'
+      className: 'text-gray-900'
     },
     {
       text: "Proofly.com",
-      className: "text-purple dark:text-blue-500"
+      className: "text-purple dark:text-purple-500"
     },
   ];
   return (

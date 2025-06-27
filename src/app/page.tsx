@@ -8,6 +8,7 @@ import { CardHoverEffectDemo } from "./components/ui/CardHoverEffect";
 import Hero from "./components/PhoneHeroSection";
 import { BackgroundLines } from "@/components/ui/BackgroundLine";
 import AnimatedJourney from "./components/TimeLine";
+import WhyProofly from "./components/Features";
 
 
 
@@ -31,7 +32,7 @@ export default function Home() {
         </div>
         {/* Right */}
         <div className="relative">
-          <div className="object-cover rounded-[40px] shadow-2xl">
+          <div>
             <AnimatedJourney />
           </div>
         </div>
@@ -72,6 +73,7 @@ export default function Home() {
           How it Works?
         </Link>
       </section>
+      <WhyProofly/>
 
       {/* Carousel Section — Show on all screens */}
       <section className="bg-[#ffffff] py-12 text-center px-6 md:px-4">

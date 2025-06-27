@@ -120,19 +120,27 @@ export default function AnimatedJourney() {
         >
           <div className="relative p-4 rounded-full bg-transparent">
             {/* Glowing effect */}
-            <motion.div
-              className="absolute inset-0 rounded-full blur-2xl bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-500 z-[-1]"
-              animate={{
-                opacity: [0.4, 1],
-                scale: [1, 1.15],
-              }}
-              transition={{
-                duration: 1.2,
-                repeat: Infinity,
-                repeatType: 'reverse',
-                ease: 'easeInOut',
-              }}
-            />
+           <motion.div
+  className="
+    absolute inset-0 rounded-full blur-2xl z-[-1]
+    bg-gradient-to-br
+    from-[#4f46e5] via-[#7c3aed] to-[#6366f1]
+    dark:from-blue-600 dark:via-fuchsia-700 dark:to-indigo-600
+    opacity-40 dark:opacity-80
+    transition-all duration-500
+  "
+  animate={{
+    scale: [1, 1.15],
+    opacity: [0.4, 1],
+  }}
+  transition={{
+    duration: 1.2,
+    repeat: Infinity,
+    repeatType: 'reverse',
+    ease: 'easeInOut',
+  }}
+/>
+
             {step.icon}
           </div>
           <span className="mt-2 text-xs md:text-sm text-white font-semibold whitespace-nowrap text-center">
