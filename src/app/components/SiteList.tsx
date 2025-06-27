@@ -75,9 +75,6 @@ export default function UserSites({sites}: Props) {
                   }}>
                     View
                   </button>
-                  <button className="text-sm px-3 py-1 bg-red-100 text-red-700 rounded-lg hover:bg-red-200">
-                    Delete
-                  </button>
                 </div>
               </div>
           </div>

@@ -16,16 +16,8 @@ const Navbar = () => {
   { name: 'Pricing', path: '/pricing' },
   { name: 'How it works', path: '/HowItWorks' },
   { name: 'Reviews', path: '/reviews' },
+  { name : 'Dashboard', path : `/dashboard/${session?.user?.uuid}`}
 ];
-
-const goToDashboard = () => {
-    if (session?.user?.uuid) {
-      router.push(`/dashboard/${session.user.uuid}`);
-    } else {
-      router.push('/login');
-    }
-    console.log(session?.user?.uuid);
-  };
 
   return (
     <nav className="w-full bg-black text-white">
@@ -47,12 +39,6 @@ const goToDashboard = () => {
                  </Link>
               </li>
             ))}
-            <li
-  className="hover:text-purple-400 cursor-pointer transition-colors"
-  onClick={goToDashboard}>
-  Dashboard
-</li>
-
           </ul>
 
           {/* Right side controls */}
