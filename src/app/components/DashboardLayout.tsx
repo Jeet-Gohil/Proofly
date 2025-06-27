@@ -2,9 +2,8 @@
 
 import { useState, useMemo } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { Home, Settings, PlusSquare, LayoutDashboard, Menu } from 'lucide-react';
+import { Home, Settings, PlusSquare, LayoutDashboard, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '@/lib/utils';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [hovered, setHovered] = useState(false);
@@ -40,6 +39,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             className="fixed top-0 left-0 z-40 h-full w-64 bg-zinc-900 px-6 py-8 space-y-6 shadow-lg"
           >
+            {/* Close button for mobile */}
+            <button
+              onClick={() => setHovered(false)}
+              className="absolute top-4 right-4 text-white hover:text-red-400 transition"
+            >
+              <X size={20} />
+            </button>
+
             <h1 className="text-2xl font-bold text-indigo-400">Welcome</h1>
             <nav className="flex flex-col gap-2">
               {navItems.map((item) => {

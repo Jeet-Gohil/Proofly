@@ -5,7 +5,7 @@ import { useTheme } from 'next-themes'
 import { useState, useEffect } from 'react'
 import { Sun, Moon, Rocket } from 'lucide-react'
 import { TextGenerateEffectDemo } from './ui/GenerateText'
-
+import { useRouter } from 'next/navigation'
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
@@ -14,6 +14,7 @@ const fadeUp = {
 export default function Hero() {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const router = useRouter();
 
   useEffect(() => setMounted(true), [])
 
@@ -47,7 +48,7 @@ export default function Hero() {
         <motion.form
           onSubmit={(e) => {
             e.preventDefault()
-            alert('Get Started clicked')
+          
           }}
           className="flex flex-col gap-3 w-full"
         >
@@ -58,6 +59,7 @@ export default function Hero() {
             required
           />
           <button
+          onClick={()=>{router.push(`/SignUp`)}}
             type="submit"
             className="bg-primary hover:bg-primary/90 text-gray-500 font-medium py-3 rounded-lg transition-all flex items-center justify-center gap-2"
           >
