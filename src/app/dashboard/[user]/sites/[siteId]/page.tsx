@@ -78,10 +78,10 @@ interface visitsLine {
 }
 
 interface TopPagesData {
-  ok : any;
   page : string;
-  views : Number;
+  views : number;
 }
+
 
 
 
@@ -91,7 +91,6 @@ export default function AnalyticsPage() {
   const { siteId, user } = useParams();
   const [views, setViews] = useState<PageViewData[]>([]);
   const [siteInfo, setSiteInfo] = useState<SiteData | null>(null);
-  const [showScript, setShowScript] = useState(false);
   const [Visits, SetVisits] = useState<visitsLine[]>([]);
   const [TopPages, setTopPages] = useState<TopPagesData[]>([]);
   const [Device, setDevice] = useState<DeviceData[]>([]);
@@ -170,8 +169,10 @@ export default function AnalyticsPage() {
     const fetchAnalytics = async() => {
       const visits = await fetchWithLoader<visitsLine[]>(`/api/sites/${siteId}/Analytics/VisitsVsDate`);
       const device = await fetchWithLoader<DeviceData[]>(`/api/sites/${siteId}/Analytics/DeviceType`);
+      const TopPages = await fetchWithLoader<TopPagesData[]>(`/api/sites/${siteId}/Analytics/TopPages`);
         SetVisits(visits);
         setDevice(device);
+        setTopPages(TopPages);
     };
     fetchAnalytics();
     }, []);
@@ -197,7 +198,7 @@ export default function AnalyticsPage() {
       />
       {/* Chartings*/}
       <div className='pt-4 pb-4'>
-        <AnalyticsWrapper visitsData={Visits} deviceData={Device} topPagesData={topPagesData} liveLocations={liveGeo}/>
+        <AnalyticsWrapper visitsData={Visits} deviceData={Device} liveLocations={liveGeo} topPagesData={TopPages}/>
       </div>
      
     </div>
