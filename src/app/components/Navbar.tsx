@@ -13,10 +13,11 @@ const Navbar = () => {
   const {data : session} = useSession();
   const navItems = [
   { name: 'Home', path: '/' },
-  { name: 'Pricing', path: '/pricing' },
+  { name: 'Explore', path: '/Explore' },
   { name: 'How it works', path: '/HowItWorks' },
   { name: 'Reviews', path: '/reviews' },
-  { name : 'Dashboard', path : `/dashboard/${session?.user?.uuid}`}
+  { name : 'Dashboard', path : `/dashboard/${session?.user?.uuid}`},
+  {name: 'Pricing', path: '/pricing' }
 ];
 
   return (

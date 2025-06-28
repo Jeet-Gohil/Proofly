@@ -44,3 +44,30 @@ export async function GET(
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+
+function getSiteIdFromRequest(req: NextRequest): string | null {
+  const segments = new URL(req.url).pathname.split("/");
+  return segments[3] ?? null;
+}
+
+export async function DELETE(req: NextRequest) {
+  const site_id = getSiteIdFromRequest(req);
+  if (!site_id) {
+    return NextResponse.json({ error: 'Missing site_id' }, { status: 400 });
+  }
+  try {
+    const result = await pool.query(`DELETE FROM sites WHERE site_id = $1`, [site_id]);
+    
+    if (result.rowCount === 0) {
+      return NextResponse.json({ error: 'Site not found' }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: 'Site deleted successfully' });
+  }
+  catch(error) {
+    console.error('Error deleting site:', error);
+    return NextResponse.json(
+      { error: 'Something went wrong' },
+      { status: 500 }
+    );
+}}

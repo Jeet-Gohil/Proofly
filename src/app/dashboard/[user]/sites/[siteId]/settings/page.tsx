@@ -7,17 +7,20 @@ import SecuritySettings from '@/app/components/settings/securitySettings';
 import AppearanceSettings from '@/app/components/settings/appearanceSettings';
 import NotificationSettings from '@/app/components/settings/notificationSettings';
 import DangerZone from '@/app/components/settings/dangerZone';
+import { useParams } from 'next/navigation';
 
-const tabs = [
+
+
+export default function SettingsPage() {
+  const {siteId} = useParams();
+  const tabs = [
   { name: 'Profile', component: <ProfileSettings /> },
   { name: 'Site Preferences', component: <SitePreferences /> },
   { name: 'Security', component: <SecuritySettings /> },
   { name: 'Appearance', component: <AppearanceSettings /> },
   { name: 'Notifications', component: <NotificationSettings /> },
-  { name: 'Danger Zone', component: <DangerZone /> },
+  { name: 'Danger Zone', component: <DangerZone siteId={siteId as string} /> },
 ];
-
-export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState('Profile');
 
   const ActiveComponent = tabs.find((tab) => tab.name === activeTab)?.component;

@@ -2,6 +2,8 @@
 "use client";
 
 import UserSites from "@/app/components/SiteList";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 
@@ -25,6 +27,14 @@ interface Site {
 export default function SitesPage() {
   // ✅ Correctly type the state
   const [sitesData, setSites] = useState<Site[]>([]);
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+ useEffect(() => {
+ if (!session?.user?.uuid) {
+    router.push('/login');
+ }
+   }, [session, router]);
 
   useEffect(() => {
     const fetchSites = async () => {
@@ -35,7 +45,7 @@ export default function SitesPage() {
 
     fetchSites();
   }, []);
-
+  console.log(sitesData);
   return (
     <div>
       <div className="max-w-7xl mx-auto">

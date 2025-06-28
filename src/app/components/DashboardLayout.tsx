@@ -10,13 +10,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const router = useRouter();
   const params = useParams();
   const userId = params.user as string;
+  const siteId = params.siteId as string;
 
   const navItems = useMemo(() => [
     { name: 'Home', path: '/', icon: Home },
     { name: 'Dashboard', path: `/dashboard/${userId}`, icon: LayoutDashboard },
     { name: 'Add Sites', path: `/dashboard/${userId}/sites`, icon: PlusSquare },
-    { name: 'Settings', path: `/dashboard/${userId}/settings`, icon: Settings },
-  ], [userId]);
+    { name: 'Settings', path: `/dashboard/${userId}/sites/${siteId}/settings`, icon: Settings },
+  ], [userId, siteId]);
+
+  console.log(siteId);
 
   return (
     <div className="flex h-screen bg-black text-white relative overflow-hidden">

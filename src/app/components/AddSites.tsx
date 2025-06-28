@@ -22,6 +22,7 @@ interface SiteFormData {
   domain_verified: boolean
   geo_tracking_enabled: boolean
   logo_url: string
+  Is_public: boolean
 }
 
 const AddSiteForm = () => {
@@ -37,6 +38,7 @@ const AddSiteForm = () => {
     domain_verified: false,
     geo_tracking_enabled: false,
     logo_url: '',
+    Is_public: false,
   })
 
   const handleChange = (
@@ -82,6 +84,7 @@ const AddSiteForm = () => {
           domain_verified: false,
           geo_tracking_enabled: false,
           logo_url: '',
+          Is_public: false,
         })
       } else {
         toast.error(
@@ -144,6 +147,7 @@ const AddSiteForm = () => {
           onChange={handleChange}
         >
           <option value="">Select type</option>
+          <option value="SaaS">SaaS</option>
           <option value="portfolio">Portfolio</option>
           <option value="blog">Blog</option>
           <option value="ecommerce">E-commerce</option>
@@ -202,6 +206,15 @@ const AddSiteForm = () => {
               onChange={handleChange}
             />
             Geo Tracking Enabled
+          </label>
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              name="geo_tracking_enabled"
+              checked={form.Is_public}
+              onChange={handleChange}
+            />
+            Metrics data public
           </label>
         </div>
 

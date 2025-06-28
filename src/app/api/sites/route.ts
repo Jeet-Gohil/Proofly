@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
       logo_url = null,
       tags = [],
       status = 'active',
+      is_public = false,
     } = body;
 
     if (!site_url) {
@@ -62,8 +63,8 @@ export async function POST(req: NextRequest) {
       `INSERT INTO sites (
         email, site_url, site_name, description, tracking_type,
         domain_verified, tracking_script_injected, geo_tracking_enabled,
-        logo_url, tags, status
-      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *`,
+        logo_url, tags, status, is_public
+      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *`,
       [
         email,
         site_url,
@@ -76,6 +77,7 @@ export async function POST(req: NextRequest) {
         logo_url,
         tagsArray,
         status,
+        is_public
       ]
     );
 

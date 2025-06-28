@@ -1,18 +1,46 @@
 'use client';
 
+import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export default function DangerZone() {
-  const [confirm, setConfirm] = useState('');
+interface Props {
+  siteId: string;
+}
 
-  const handleDelete = () => {
+export default function DangerZone({ siteId }: Props) {
+  const [confirm, setConfirm] = useState('');
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const {user} = useParams();
+
+  const handleDelete = async () => {
     if (confirm !== 'DELETE') {
       alert('Please type DELETE to confirm.');
       return;
     }
 
-    alert('Account deleted. (This is just a demo)');
-    // Actual deletion logic here
+    setLoading(true);
+
+    try {
+      const res = await fetch(`/api/sites/${siteId}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ site_id: siteId }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to delete site.');
+      }
+
+      alert('Site deleted successfully!');
+      router.push(`/dashboard/${user}`);
+      // Optional: redirect or update UI
+    } catch (err) {
+      console.error(err);
+      alert('Something went wrong.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -20,7 +48,7 @@ export default function DangerZone() {
       <h3 className="text-xl font-bold text-red-600">Danger Zone</h3>
 
       <p className="text-sm text-zinc-700 dark:text-zinc-300">
-        Deleting your account is permanent and cannot be undone.
+        Deleting your site is permanent and cannot be undone.
       </p>
 
       <input
@@ -33,9 +61,10 @@ export default function DangerZone() {
 
       <button
         onClick={handleDelete}
-        className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
+        disabled={loading}
+        className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 disabled:opacity-50"
       >
-        Delete Account
+        {loading ? 'Deleting...' : 'Delete Site'}
       </button>
     </div>
   );
