@@ -210,7 +210,7 @@ const AddSiteForm = () => {
           <label className="flex items-center gap-2">
             <input
               type="checkbox"
-              name="geo_tracking_enabled"
+              name="is_public"
               checked={form.Is_public}
               onChange={handleChange}
             />
