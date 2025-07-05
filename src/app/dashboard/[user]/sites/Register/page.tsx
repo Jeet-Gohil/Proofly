@@ -2,10 +2,8 @@
 import React, { useState } from 'react'
 import LoginSuccessPopup from '@/app/components/LoginSuccessPopup'
 
-export default function page() {
+export default function Page() {
 
-  const [Popup, showPopup] = useState(false);
-  const [data, setData] = useState(null);
 
   const [formData, setFormData] = useState({
     email: '',
