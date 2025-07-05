@@ -17,6 +17,9 @@ export default function AuthCallbackPage() {
       if (uuid) {
         router.replace(`/dashboard/${uuid}`);
       }
+      else if (!uuid) {
+        router.replace('/');
+      }
     }
   }, [status, session, router]);
 

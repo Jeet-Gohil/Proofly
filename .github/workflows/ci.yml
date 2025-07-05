@@ -1,0 +1,29 @@
+name : Proofly CI
+
+on : 
+  push : 
+    branches : [main]
+
+  pull_requests : 
+    branches : [main]
+
+jobs : 
+  builds-and-test :
+    runs-on : ubuntu-latest
+
+    steps : 
+      -uses : actions/checkout@v3
+
+      -name : setup node js 
+      with : 
+        node-version : 22.14.0
+
+      -run : npm install
+
+      -name : run linter
+         run : npm run linter
+
+      -name : run tests 
+
+        run : npm run test 
+

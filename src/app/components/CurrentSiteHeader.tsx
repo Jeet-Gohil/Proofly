@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Eye } from 'lucide-react';
+import { Eye, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 import type { FC, ReactNode } from 'react';
 
 type DashboardHeaderProps = {
@@ -10,19 +11,24 @@ type DashboardHeaderProps = {
   trackingScriptComponent: ReactNode;
 };
 
+const navItems = [
+  { label: 'Overview', href: '/dashboard/overview' },
+  { label: 'Geo Tracking', href: '/dashboard/geo' },
+  { label: 'Goals', href: '/dashboard/goals' },
+  { label: 'Settings', href: '/dashboard/settings' },
+];
+
 const DashboardHeader: FC<DashboardHeaderProps> = ({ siteName, trackingScriptComponent }) => {
   const [showScript, setShowScript] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   return (
-    <div className="w-full border-b border-zinc-800  text-white shadow-md">
-      <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row sm:justify-end sm:items-center gap-4">
-        {/* Header Title and Eye Button Grouped to Right */}
-        <div className="flex items-center gap-3 relative">
-          {/* Site Name */}
-          <h1 className="text-xl sm:text-2xl font-bold text-white">
-            {siteName}
-          </h1>
+    <div className="w-full border-b border-zinc-800 text-white shadow-md bg-black dark:bg-zinc-900">
+      <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        {/* Left side: Site Name */}
+        <div className="flex items-center gap-4">
+          <h1 className="text-xl sm:text-2xl font-bold text-white">{siteName}</h1>
 
           {/* Eye Button + Tooltip */}
           <div
@@ -38,7 +44,6 @@ const DashboardHeader: FC<DashboardHeaderProps> = ({ siteName, trackingScriptCom
               <Eye className="w-5 h-5 text-white" />
             </button>
 
-            {/* Tooltip */}
             <AnimatePresence>
               {hovered && (
                 <motion.div
@@ -46,7 +51,7 @@ const DashboardHeader: FC<DashboardHeaderProps> = ({ siteName, trackingScriptCom
                   animate={{ opacity: 1, y: -10 }}
                   exit={{ opacity: 0, y: -6 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute left-1/2 -translate-x-1/2 mt-2 px-3 py-1 text-xs sm:text-sm bg-zinc-700 text-white rounded shadow z-50 whitespace-nowrap"
+                  className="absolute left-1/2 -translate-x-1/2 mt-2 px-3 py-1 text-xs bg-zinc-700 text-white rounded shadow z-50 whitespace-nowrap"
                 >
                   View tracking script
                 </motion.div>
@@ -54,7 +59,60 @@ const DashboardHeader: FC<DashboardHeaderProps> = ({ siteName, trackingScriptCom
             </AnimatePresence>
           </div>
         </div>
+
+        {/* Right side: Desktop Nav */}
+        <div className="hidden md:flex items-center gap-6">
+          {navItems.map(item => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="text-sm font-medium text-zinc-300 hover:text-white transition"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+
+        {/* Mobile Nav Toggle */}
+        <div className="md:hidden flex items-center">
+          <button
+            onClick={() => setMobileNavOpen(prev => !prev)}
+            className="p-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 transition"
+            aria-label="Toggle Menu"
+          >
+            {mobileNavOpen ? (
+              <X className="w-5 h-5 text-white" />
+            ) : (
+              <Menu className="w-5 h-5 text-white" />
+            )}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Nav */}
+      <AnimatePresence>
+        {mobileNavOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden bg-zinc-900 border-t border-zinc-800 overflow-hidden"
+          >
+            <div className="flex flex-col p-4 gap-4">
+              {navItems.map(item => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="text-sm font-medium text-zinc-300 hover:text-white transition"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Tracking Script Section */}
       <AnimatePresence>

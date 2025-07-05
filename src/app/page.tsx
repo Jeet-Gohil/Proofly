@@ -9,6 +9,7 @@ import Hero from "./components/PhoneHeroSection";
 import { BackgroundLines } from "@/components/ui/BackgroundLine";
 import AnimatedJourney from "./components/TimeLine";
 import WhyProofly from "./components/Features";
+import { TimelineDemo } from "./components/ui/Timeline";
 
 
 
@@ -17,7 +18,7 @@ export default function Home() {
   return (
     <div>
       
-      <section className="relative overflow-hidden bg-black text-white HeroSection bg-cover">
+      <section className="relative overflow-hidden text-white HeroSection bg-cover">
 
   {/* ✅ BackgroundLines & Desktop Grid – Hidden on small screens */}
   <div className="hidden md:block">
@@ -89,7 +90,7 @@ export default function Home() {
       </section>
 
     {/* how to get started*/}
-    <section className="bg-gray-800 py-12 text-center px-6 md:px-4 getStartedSection">
+    {/* <section className="bg-gray-800 py-12 text-center px-6 md:px-4 getStartedSection">
       <h2 className="text-3xl md:text-5xl font-semibold text-white mb-6">
           How to get Started !
         </h2>
@@ -97,7 +98,8 @@ export default function Home() {
           Please follow the below given steps !
         </p>
         <CardHoverEffectDemo/>
-    </section>
+    </section> */}
+    <TimelineDemo/>
     </div>
   );
 }

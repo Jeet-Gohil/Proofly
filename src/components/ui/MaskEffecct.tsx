@@ -7,7 +7,7 @@ export const MaskContainer = ({
   children,
   revealText,
   size = 5,
-  revealSize = 600,
+  revealSize = 500,
   className,
   
 }: {

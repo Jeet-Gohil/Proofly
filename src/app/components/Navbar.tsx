@@ -1,31 +1,34 @@
 'use client';
 
 import { useState } from 'react';
-import { Menu, X, LogIn } from 'lucide-react';
+import { Menu, X, LogIn, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const router = useRouter();
-  const {data : session} = useSession();
+  const { data: session, status } = useSession();
+
   const navItems = [
-  { name: 'Home', path: '/' },
-  { name: 'Explore', path: '/Explore' },
-  { name: 'How it works', path: '/HowItWorks' },
-  { name: 'Reviews', path: '/reviews' },
-  { name : 'Dashboard', path : `/dashboard/${session?.user?.uuid}`},
-  {name: 'Pricing', path: '/pricing' }
-];
+    { name: 'Home', path: '/' },
+    { name: 'Explore', path: '/Explore' },
+    { name: 'How it works', path: '/HowItWorks' },
+    { name: 'Reviews', path: '/reviews' },
+    { name: 'Dashboard', path: session?.user?.uuid ? `/dashboard/${session.user.uuid}` : '/login' },
+    { name: 'Pricing', path: '/pricing' },
+  ];
 
   return (
     <nav className="w-full bg-black text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <div className="text-xl font-bold"><Link href={'/'}>Proofly</Link></div>
+          <div className="text-xl font-bold">
+            <Link href="/">Proofly</Link>
+          </div>
 
           {/* Desktop Menu */}
           <ul className="hidden md:flex space-x-6 font-medium">
@@ -34,24 +37,35 @@ const Navbar = () => {
                 key={item.name}
                 className="hover:text-purple-400 cursor-pointer transition-colors"
               >
-                 <Link
-                    href={item.path} className="hover:text-purple-400 transition-colors">
-                     {item.name}
-                 </Link>
+                <Link href={item.path} className="hover:text-purple-400 transition-colors">
+                  {item.name}
+                </Link>
               </li>
             ))}
           </ul>
 
           {/* Right side controls */}
           <div className="flex items-center space-x-4">
-            {/* Toggle */}
-           <ThemeToggle/>
+            <ThemeToggle />
 
-            {/* Wallet Button */}
-            <button onClick={()=> {router.push('/login')}} className="hidden md:flex items-center gap-2 px-4 py-2 bg-[#2A0E61] text-purple-300 rounded-lg border border-[#3c1a75] hover:bg-[#3c1a75] transition">
-              <LogIn size={16} />
-              <span className="text-sm font-medium">Login</span>
-            </button>
+            {/* Only show Login if NOT logged in */}
+            {status === 'loading' ? null : !session ? (
+              <button
+                onClick={() => router.push('/login')}
+                className="hidden md:flex items-center gap-2 px-4 py-2 bg-[#2A0E61] text-purple-300 rounded-lg border border-[#3c1a75] hover:bg-[#3c1a75] transition"
+              >
+                <LogIn size={16} />
+                <span className="text-sm font-medium">Login</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => signOut()}
+                className="hidden md:flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg border border-red-700 hover:bg-red-700 transition"
+              >
+                <LogOut size={16} />
+                <span className="text-sm font-medium">Logout</span>
+              </button>
+            )}
 
             {/* Mobile Hamburger Icon */}
             <button
@@ -73,36 +87,32 @@ const Navbar = () => {
                 key={item.name}
                 className="hover:text-purple-400 cursor-pointer transition-colors"
               >
-                <Link
-                    href={item.path} className="hover:text-purple-400 transition-colors">
-                     {item.name}
-                 </Link>
+                <Link href={item.path} className="hover:text-purple-400 transition-colors">
+                  {item.name}
+                </Link>
               </li>
             ))}
           </ul>
+          <ThemeToggle />
 
-          {/* Toggle & Wallet on mobile */}
-          {/* <div className="flex items-center space-x-4 mt-4">
-            <Sun size={18} />
+          {/* Only show Login if NOT logged in */}
+          {status === 'loading' ? null : !session ? (
             <button
-              className="relative w-10 h-5 rounded-full bg-purple-600 transition"
-              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2 bg-[#2A0E61] text-purple-300 rounded-lg border border-[#3c1a75] hover:bg-[#3c1a75] transition"
+              onClick={() => router.push('/login')}
             >
-              <span
-                className={`absolute top-[2px] left-[2px] h-4 w-4 rounded-full bg-white transition-transform ${
-                  isDarkMode ? 'translate-x-5' : ''
-                }`}
-              />
+              <LogIn size={16} />
+              <span className="text-sm font-medium">Login</span>
             </button>
-            <Moon size={18} />
-          </div> */}
-          <ThemeToggle/>
-          
-
-          <button className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2 bg-[#2A0E61] text-purple-300 rounded-lg border border-[#3c1a75] hover:bg-[#3c1a75] transition" onClick={()=> {router.push('/login')}}>
-            <LogIn size={16} />
-            <span className="text-sm font-medium">Login</span>
-          </button>
+          ) : (
+            <button
+              className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg border border-red-700 hover:bg-red-700 transition"
+              onClick={() => signOut({callbackUrl: '/'})}
+            >
+              <LogOut size={16} />
+              <span className="text-sm font-medium">Logout</span>
+            </button>
+          )}
         </div>
       )}
     </nav>

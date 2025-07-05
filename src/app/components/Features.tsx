@@ -1,91 +1,86 @@
-'use client'
+'use client';
 
-import { motion } from 'framer-motion'
-import { Radar, Eye, Activity, Zap } from 'lucide-react'
-import { JSX } from 'react'
+import React, { JSX } from 'react';
+import { motion } from 'framer-motion';
+import { Radar, Zap, Activity, Eye } from 'lucide-react';
 
-type Feature = {
-  title: string
-  description: string
-  icon: JSX.Element
+interface Feature {
+  title: string;
+  description: string;
+  icon: JSX.Element;
 }
 
 const features: Feature[] = [
   {
     title: 'Real-time Visitor Tracking',
     description: 'See who is visiting your site as it happens with detailed geo and device insights.',
-    icon: <Radar className="w-6 h-6" />,
+    icon: <Radar className="w-6 h-6 text-purple-500" />,
   },
   {
     title: 'Live Notification Banners',
     description: 'Boost conversions with live social proof banners showing real-time user activity.',
-    icon: <Zap className="w-6 h-6" />,
+    icon: <Zap className="w-6 h-6 text-purple-500" />,
   },
   {
     title: 'Actionable Analytics',
     description: 'Visualize and understand user behavior with beautiful and intuitive dashboards.',
-    icon: <Activity className="w-6 h-6" />,
+    icon: <Activity className="w-6 h-6 text-purple-500" />,
   },
   {
     title: 'Easy Integration',
     description: 'Drop-in tracking script with zero configuration. Start seeing insights instantly.',
-    icon: <Eye className="w-6 h-6" />,
+    icon: <Eye className="w-6 h-6 text-purple-500" />,
   },
-]
-
-import type { Variants } from 'framer-motion'
-
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      type: 'spring',
-      stiffness: 100,
-    },
-  },
-}
+];
 
 export default function WhyProofly() {
   return (
-    <section className="w-full px-6 py-16 md:py-24 bg-gradient-to-tr from-white via-gray-100 to-white dark:from-black dark:via-zinc-900 dark:to-black text-black dark:text-white transition-colors duration-500">
-      <div className="max-w-7xl mx-auto text-center">
-        <motion.h2
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, type: 'spring' }}
-          className="text-4xl md:text-5xl font-bold mb-6 text-indigo-500"
-        >
-          Why Proofly?
-        </motion.h2>
-        <p className="text-lg md:text-xl mb-12 max-w-2xl mx-auto">
-          Proofly helps you boost trust and increase conversions by showing real-time activity and powerful analytics.
-        </p>
+    <section
+      className="
+        relative w-full overflow-hidden
+        bg-black dark:bg-black text-white
+        py-16 px-4 md:px-12
+        before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-16
+        before:bg-gradient-to-b before:from-white dark:before:from-gray-900 before:to-transparent
+        after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-16
+        after:bg-gradient-to-t after:from-white dark:after:from-gray-900 after:to-transparent
+        pointer-events-none
+      "
+    >
+      <div className="relative pointer-events-auto max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+        {/* Left */}
+        <div className="flex-1 max-w-lg">
+          <h2 className="uppercase tracking-widest text-gray-400 mb-4">WHY PROOFLY</h2>
+          <h3 className="text-4xl md:text-5xl font-bold mb-6">
+            Don&apos;t just trust <span className="text-purple-500">our data</span> — see the <span className="text-purple-500">proof</span> in real-time!
+          </h3>
+          <p className="text-gray-400 text-lg">
+            Proofly gives you live visitor tracking and real-time social proof.
+            Show your growth, build trust, and boost your conversions effortlessly.
+          </p>
+        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {features.map((feature, i) => (
-            <motion.div
-              key={feature.title}
-              custom={i}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={cardVariants}
-              className="p-6 rounded-2xl shadow-lg bg-white hover:bg-gray-100 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-all duration-300 border border-transparent hover:border-indigo-400"
-            >
-              <div className="flex items-center justify-center mb-4 text-indigo-500">
-                {feature.icon}
-              </div>
-              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                {feature.description}
-              </p>
-            </motion.div>
-          ))}
+        {/* Right: Infinite sliding cards */}
+        <div className="flex-1 w-full overflow-hidden relative">
+          <motion.div
+            className="flex gap-6"
+            animate={{ x: ['0%', '-100%'] }}
+            transition={{ repeat: Infinity, ease: 'linear', duration: 20 }}
+          >
+            {[...features, ...features].map((feature, idx) => (
+              <motion.div
+                key={idx}
+                whileHover={{ scale: 1.05 }}
+                className="min-w-[250px] max-w-[250px] bg-neutral-900 dark:bg-neutral-800 border border-neutral-700 p-6 rounded-xl shadow-md"
+              >
+                <div className="mb-4">{feature.icon}</div>
+                <h4 className="text-xl font-semibold mb-2">{feature.title}</h4>
+                <p className="text-gray-400 text-sm">{feature.description}</p>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </div>
     </section>
-  )
+  );
 }
