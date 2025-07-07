@@ -32,7 +32,9 @@ export default function RootLayout({
         <Providers>
           <Navbar/>
           <LoadingOverlay/>
+          <div className="pt-20">
         {children}
+        </div>
         <Footer/>
         </Providers>
         </ThemeProvider>

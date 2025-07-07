@@ -17,7 +17,7 @@ export const BackgroundLines = ({
   return (
     <div
       className={cn(
-        "h-[20rem] md:h-screen w-full bg-stone-700 dark:bg-gradient-to-br from-[#0a0a0a] via-[#121212] to-black",
+        "h-[20rem] md:h-screen w-full bg-gradient-to-br from-[#0a0a0a] via-[#121212] to-black",
         className
       )}
     >
@@ -28,7 +28,7 @@ export const BackgroundLines = ({
 };
 
 const pathVariants = {
-  initial: { strokeDashoffset: 800, strokeDasharray: "50 800" },
+  initial: { strokeDashoffset: 2000, strokeDasharray: "100 100" },
   animate: {
     strokeDashoffset: 0,
     strokeDasharray: "20 800",

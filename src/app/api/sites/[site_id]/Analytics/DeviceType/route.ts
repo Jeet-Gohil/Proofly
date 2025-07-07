@@ -13,6 +13,7 @@ function detectDevice(userAgent: string): 'Mobile' | 'Tablet' | 'Desktop' {
 
 function getSiteIdFromRequest(req: NextRequest): string | null {
   const segments = new URL(req.url).pathname.split("/");
+
   return segments[3] ?? null;
 }
 

@@ -5,30 +5,34 @@ import { Eye, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import type { FC, ReactNode } from 'react';
+import { useParams } from 'next/navigation';
 
 type DashboardHeaderProps = {
   siteName: string;
   trackingScriptComponent: ReactNode;
 };
 
-const navItems = [
-  { label: 'Overview', href: '/dashboard/overview' },
-  { label: 'Geo Tracking', href: '/dashboard/geo' },
-  { label: 'Goals', href: '/dashboard/goals' },
-  { label: 'Settings', href: '/dashboard/settings' },
-];
 
 const DashboardHeader: FC<DashboardHeaderProps> = ({ siteName, trackingScriptComponent }) => {
   const [showScript, setShowScript] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const {user, siteId} = useParams();
+
+  const navItems = [
+  { label: 'Overview', href: '/dashboard/overview' },
+  { label: 'Geo Tracking', href: '/dashboard/geo' },
+  { label: 'Widgets', href: `/dashboard/${user}/sites/${siteId}/widgets` },
+  { label: 'Settings', href: '/dashboard/settings' },
+];
+
 
   return (
-    <div className="w-full border-b border-zinc-800 text-white shadow-md bg-black dark:bg-zinc-900">
+    <div className="w-full border-b border-zinc-800 text-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
         {/* Left side: Site Name */}
         <div className="flex items-center gap-4">
-          <h1 className="text-xl sm:text-2xl font-bold text-white">{siteName}</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">{siteName}</h1>
 
           {/* Eye Button + Tooltip */}
           <div
@@ -66,7 +70,7 @@ const DashboardHeader: FC<DashboardHeaderProps> = ({ siteName, trackingScriptCom
             <Link
               key={item.href}
               href={item.href}
-              className="text-sm font-medium text-zinc-300 hover:text-white transition"
+              className="text-sm font-medium text-gray-800 dark:text-zinc-300 hover:text-white transition"
             >
               {item.label}
             </Link>

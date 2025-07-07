@@ -1,52 +1,55 @@
 'use client';
+
 import Link from "next/link";
+import React from "react";
+import { motion } from "framer-motion";
 import { DraggableCardDemo } from "./components/ui/DraggableCards";
 import { SVGMaskEffectDemo } from "./components/ui/Mask-Effect";
-import React from "react";
-import MosaicImage from "@/components/ui/Mosaic-Image";
-import { CardHoverEffectDemo } from "./components/ui/CardHoverEffect";
-import Hero from "./components/PhoneHeroSection";
 import { BackgroundLines } from "@/components/ui/BackgroundLine";
-import AnimatedJourney from "./components/TimeLine";
+import Hero from "./components/PhoneHeroSection";
 import WhyProofly from "./components/Features";
 import { TimelineDemo } from "./components/ui/Timeline";
-
-
-
+import image from "../../public/Dev.png";
 
 export default function Home() {
   return (
     <div>
-      
+      {/* ✅ Hero Section */}
       <section className="relative overflow-hidden text-white HeroSection bg-cover">
 
-  {/* ✅ BackgroundLines & Desktop Grid – Hidden on small screens */}
-  <div className="hidden md:block">
-    <BackgroundLines className="flex items-center justify-center w-full flex-col px-4">
-      <div className="relative z-10 grid max-w-6xl mx-auto grid-cols-2 items-center gap-15 py-2 px-1">
-        {/* Left */}
-        <div className="space-y-4">
-          <SVGMaskEffectDemo />
-          <p className="text-sm text-gray-300 mt-4">
-            <span className="text-green-400 font-semibold">1,000+ people</span> started a free trial in the last 30 days
-          </p>
+        {/* ✅ Desktop Background & Layout */}
+        <div className="hidden md:block">
+          <BackgroundLines className="flex items-center justify-center w-full flex-col px-4">
+            <div className="relative z-10 grid max-w-6xl mx-auto grid-cols-2 items-center gap-10 py-12 px-4">
+              
+              {/* Left */}
+              <div className="space-y-4">
+                <SVGMaskEffectDemo />
+                <p className="text-sm text-gray-300 mt-4">
+                  <span className="text-green-400 font-semibold">1,000+ people</span> started a free trial in the last 30 days
+                </p>
+              </div>
+
+              {/* Right: New 3D AI Hero Image with Framer */}
+              <div className="relative flex justify-center items-center">
+                <motion.img
+                  src= "Dev.png" // put your image path here
+                  alt="Proofly 3D Visual"
+                  className="w-full max-w-md xl:max-w-lg"
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 1.2, ease: "easeOut" }}
+                />
+              </div>
+            </div>
+          </BackgroundLines>
         </div>
-        {/* Right */}
-        <div className="relative">
-          <div>
-            <AnimatedJourney />
-          </div>
-        </div>
-      </div>
-    </BackgroundLines>
-  </div>
 
-  {/* ✅ Hero section for all screens, mostly visible on mobile */}
-  <Hero />
-</section>
+        {/* ✅ Mobile: Your existing hero */}
+        <Hero />
+      </section>
 
-
-      {/* Trusted Section — Show on all screens */}
+      {/* ✅ Trusted Section */}
       <section className="text-center px-6 md:px-16 py-16 md:py-24 bg-white text-[#374151]">
         <p className="text-base text-gray-500 mb-6">
           Trusted by the world’s fastest growing companies including:
@@ -74,9 +77,11 @@ export default function Home() {
           How it Works?
         </Link>
       </section>
-      <WhyProofly/>
 
-      {/* Carousel Section — Show on all screens */}
+      {/* ✅ Why Proofly Section */}
+      <WhyProofly />
+
+      {/* ✅ Carousel Section */}
       <section className="bg-[#ffffff] py-12 text-center px-6 md:px-4">
         <h2 className="text-3xl md:text-5xl font-semibold text-[#3e528b] mb-6">
           Oodles of great personalization content
@@ -89,17 +94,8 @@ export default function Home() {
         <p className="text-base"><span className="font-bold">Fun fact :-</span> you can actually Drag this cards.</p>
       </section>
 
-    {/* how to get started*/}
-    {/* <section className="bg-gray-800 py-12 text-center px-6 md:px-4 getStartedSection">
-      <h2 className="text-3xl md:text-5xl font-semibold text-white mb-6">
-          How to get Started !
-        </h2>
-        <p className="text-base md:text-lg text-white max-w-2xl mx-auto leading-relaxed mb-6">
-          Please follow the below given steps !
-        </p>
-        <CardHoverEffectDemo/>
-    </section> */}
-    <TimelineDemo/>
+      {/* ✅ Timeline Demo */}
+      <TimelineDemo />
     </div>
   );
 }
