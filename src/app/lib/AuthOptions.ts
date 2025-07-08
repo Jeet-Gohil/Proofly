@@ -82,7 +82,7 @@ export const authOptions: NextAuthOptions = {
       }
     },
     async redirect() {
-      return 'http://https://proofly-delta.vercel.app/callback'
+      return 'https://proofly-delta.vercel.app/callback'
     },
     
   },
