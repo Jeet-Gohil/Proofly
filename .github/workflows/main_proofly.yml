@@ -49,7 +49,7 @@ jobs:
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
-          app-name: 'proofly-aydbd8f2drd0fegn'
+          app-name: 'Proofly'
           slot-name: 'Production'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F5FB05159DCE4E76848729F64E1D7F0A }}
