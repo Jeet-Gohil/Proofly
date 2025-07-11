@@ -1,10 +1,13 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { MapContainer, TileLayer, CircleMarker, useMap } from 'react-leaflet';
-import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin } from 'lucide-react';
-import 'leaflet/dist/leaflet.css';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import MarkerClusterGroup from "react-leaflet-markercluster";
+import L from "leaflet";
+import { motion, AnimatePresence } from "framer-motion";
+import "leaflet/dist/leaflet.css";
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+import { useEffect } from "react";
 
 interface GeoData {
   latitude: number;
@@ -18,64 +21,74 @@ interface Props {
   liveLocations: GeoData[];
 }
 
+// Patch default icon so Next.js doesn’t break it
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl:
+    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+});
+
 const MapAutoFocus: React.FC<{ center: [number, number] }> = ({ center }) => {
   const map = useMap();
-  map.setView(center, 4); // Adjust zoom level as needed
+  useEffect(() => {
+    map.setView(center, 4);
+  }, [center, map]);
   return null;
 };
 
 const GeoMapContainer: React.FC<Props> = ({ liveLocations }) => {
- 
+  const defaultCenter: [number, number] =
+    liveLocations.length > 0
+      ? [liveLocations[0].latitude, liveLocations[0].longitude]
+      : [20.5937, 78.9629];
 
   return (
-    <div className="w-full flex flex-col items-center mt-10 space-y-6">
-      {/* Toggle Button */}
-      
-      {/* Map Display with Framer Motion */}
-      <AnimatePresence>
-         
-          <motion.div
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.92 }}
-            transition={{ duration: 0.4 }}
-            className="w-full max-w-5xl h-[60vh] rounded-xl overflow-hidden border border-gray-700"
-          >
-            <MapContainer
-              center={[20.5937, 78.9629]} // India center
-              zoom={4}
-              scrollWheelZoom={true}
-              className="h-full w-full z-10"
-            >
-              <TileLayer
-  url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-  attribution='&copy; <a href="https://carto.com/">CARTO</a>'
-/>
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        transition={{ duration: 0.4 }}
+        className="w-full h-[60vh] rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow"
+      >
+        <MapContainer
+          center={defaultCenter}
+          zoom={4}
+          scrollWheelZoom={true}
+          className="h-full w-full z-10"
+        >
+          <TileLayer
+            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            attribution='&copy; <a href="https://carto.com/">CARTO</a>'
+          />
 
+          <MarkerClusterGroup>
+            {liveLocations.map((loc, idx) =>
+              typeof loc.latitude === "number" &&
+              typeof loc.longitude === "number" ? (
+                <Marker
+                  key={idx}
+                  position={[loc.latitude, loc.longitude]}
+                >
+                  <Popup>
+                    📍 <strong>{loc.city}, {loc.country}</strong><br />
+                    Region: {loc.region}<br />
+                    Lat: {loc.latitude.toFixed(2)}, Long: {loc.longitude.toFixed(2)}
+                  </Popup>
+                </Marker>
+              ) : null
+            )}
+          </MarkerClusterGroup>
 
-              {liveLocations.map((loc, idx) =>
-                typeof loc.latitude === 'number' && typeof loc.longitude === 'number' ? (
-                  <CircleMarker
-                    key={idx}
-                    center={[loc.latitude, loc.longitude]}
-                    radius={10}
-                    pathOptions={{
-                      color: '#ff4d4f',
-                      fillColor: '#ff4d4f',
-                      fillOpacity: 0.6,
-                    }}
-                  />
-                ) : null
-              )}
-
-              {liveLocations.length > 0 && (
-                <MapAutoFocus center={[liveLocations[0].latitude, liveLocations[0].longitude]} />
-              )}
-            </MapContainer>
-          </motion.div>
-        
-      </AnimatePresence>
-    </div>
+          {liveLocations.length > 0 && (
+            <MapAutoFocus center={defaultCenter} />
+          )}
+        </MapContainer>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

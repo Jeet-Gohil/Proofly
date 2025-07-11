@@ -21,7 +21,6 @@ const DashboardHeader: FC<DashboardHeaderProps> = ({ siteName, trackingScriptCom
 
   const navItems = [
   { label: 'Overview', href: '/dashboard/overview' },
-  { label: 'Geo Tracking', href: '/dashboard/geo' },
   { label: 'Widgets', href: `/dashboard/${user}/sites/${siteId}/widgets` },
   { label: 'Settings', href: '/dashboard/settings' },
 ];

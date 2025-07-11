@@ -9,7 +9,14 @@ import VisitsLineChart from '@/app/components/Analytics/VisitsLineCharts';
 import DashboardHeader from '@/app/components/CurrentSiteHeader';
 import TrackerEmbed from '@/app/components/ScriptDisplay';
 import { fetchWithLoader } from '@/app/lib/FetchWithLoader';
+import { motion } from 'framer-motion';
+import dynamic from 'next/dynamic';
 
+
+const GeoMapContainer = dynamic(
+  () => import("@/app/components/GeoMap/GeoMap.client"),
+  { ssr: false }
+);
 let socket: Socket | null = null;
 interface PageViewData {
   siteId: string;
@@ -55,6 +62,15 @@ interface visitsLine {
 interface TopPagesData {
   page : string;
   views : number;
+}
+
+
+interface GeoData {
+  latitude: number;
+  longitude: number;
+  city: string;
+  region: string;
+  country: string;
 }
 
 
@@ -165,38 +181,76 @@ export default function AnalyticsPage() {
           }, []);
 
   return (
-     <main className="min-h-screen p-6 bg-gradient-to-b from-gray-50 via-white to-gray-50 dark:from-black dark:via-zinc-900 dark:to-black text-gray-900 dark:text-white">
-     {siteInfo && (
-           <DashboardHeader   siteName={siteInfo.site.site_name}
-              trackingScriptComponent={<TrackerEmbed userId={user as string} siteId={siteId as string}/>}
-                         />
-                              )}
-      <div className="mt-8 grid grid-cols-1 xl:grid-cols-3 gap-6">
-        {/* MAIN LEFT GRID */}
-        <div className="xl:col-span-2 space-y-6">
-          {/* Visits Chart */}
-          <VisitsLineChart data={Visits} />
+  <main className="min-h-screen p-6 bg-gradient-to-b from-gray-50 via-white to-gray-50 dark:from-black dark:via-zinc-900 dark:to-black text-gray-900 dark:text-white">
+    <div className="mt-8 grid grid-cols-1 xl:grid-cols-3 gap-6">
+      {/* MAIN LEFT GRID */}
+      <div className="xl:col-span-2 space-y-6">
+        {/* Visits Chart */}
+        <VisitsLineChart data={Visits} />
 
-          {/* Metrics */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <MetricCard label="Total Users" value={siteInfo?.total_users || 0} />
-            <MetricCard label="Total Visits" value={siteInfo?.total_visits || 0} />
-            <MetricCard label="Active Users" value={siteInfo?.active_users || 0} />
-          </div>
-          <TopPagesBar data={TopPages}/>
+        {/* Metrics */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <MetricCard label="Total Users" value={siteInfo?.total_users || 0} />
+          <MetricCard label="Total Visits" value={siteInfo?.total_visits || 0} />
+          <MetricCard label="Active Users" value={siteInfo?.active_users || 0} />
         </div>
 
-        {/* RIGHT GRID */}
-        <div className="flex flex-col gap-6">
-          <DevicePieChart data={Device} />
-          <LatestEvents liveTracking={views.map((v)=> ({
-            page: v.path,
-          timestamp: v.timestamp,
-          }))}/>
-        </div>
+        {/* Top Pages */}
+        <TopPagesBar data={TopPages} />
+
+        {/* Geo Tracking Section */}
+        {/* Geo Tracking Section */}
+<motion.section
+  initial={{ opacity: 0, y: 50 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true, amount: 0.2 }}
+  transition={{ duration: 0.6 }}
+  className="mt-8 space-y-6"
+>
+  <h2 className="text-2xl font-bold">🌍 Track Globally</h2>
+
+  {/* React Leaflet Map */}
+  <div className="w-full h-96 rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow">
+    {/* 🔥 Your ready React Leaflet Map goes here */}
+    <GeoMapContainer liveLocations={liveGeo}/>
+  </div>
+
+  {/* Geo Cards Grid */}
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {liveGeo.map((geo, index) => (
+      <motion.div
+        key={index}
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.5, delay: index * 0.1 }}
+        className="p-5 bg-white dark:bg-zinc-900 rounded-xl shadow border border-zinc-200 dark:border-zinc-800"
+      >
+        <h3 className="text-lg font-semibold">
+          {geo.country}, {geo.city}
+        </h3>
+        <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          {geo.region} — Lat: {geo.latitude.toFixed(2)}, Long: {geo.longitude.toFixed(2)}
+        </p>
+      </motion.div>
+    ))}
+  </div>
+</motion.section>
+
       </div>
-    </main>
-  );
+
+      {/* RIGHT GRID */}
+      <div className="flex flex-col gap-6">
+        <DevicePieChart data={Device} />
+        <LatestEvents liveTracking={views.map((v) => ({
+          page: v.path,
+          timestamp: v.timestamp,
+        }))} />
+      </div>
+    </div>
+  </main>
+);
+
 }
 
 type MetricCardProps = {

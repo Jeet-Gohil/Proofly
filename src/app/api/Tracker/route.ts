@@ -126,7 +126,7 @@ export async function GET(req: NextRequest) {
     }
 
    function fetchWidgetsAndRender() {
-  fetch(\`https://proofly-delta.vercel.app/api/sites/\${siteId}/Widgets\`)
+  fetch(\`http://localhost:3000/api/sites/\${siteId}/Widgets\`)
     .then(res => res.json())
     .then(widgets => {
       widgets.forEach(widget => {
