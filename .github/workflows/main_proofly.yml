@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read # This is required for actions/checkout
 
     env:                # ✅ Define ENV here
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -63,4 +63,4 @@ jobs:
           app-name: 'Proofly'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_1234 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B9BED6E7DCB44AC480C030D1F2D27134 }}
