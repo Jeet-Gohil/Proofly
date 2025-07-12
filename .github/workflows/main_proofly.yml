@@ -14,9 +14,9 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: read # This is required for actions/checkout
+      contents: read
 
-    env:                # ✅ Define ENV here
+    env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
     steps:
@@ -45,8 +45,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    
-    
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
@@ -55,12 +54,12 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
-      
+
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'Proofly'
-          slot-name: 'Production'
-          package: .
+          slot-name: 'production'  # ✅ Azure default slot name is lowercase!
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B9BED6E7DCB44AC480C030D1F2D27134 }}
+          package: .
