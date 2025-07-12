@@ -85,10 +85,9 @@ jobs:
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
     steps:
-      - name: ✅ Checkout source code
+      - name: ✅ Checkout code
         uses: actions/checkout@v4
 
       - name: ✅ Setup Node.js
@@ -96,16 +95,19 @@ jobs:
         with:
           node-version: '22.x'
 
-      - name: ✅ Install dependencies
-        run: npm install
+      - name: ✅ Clean install
+        run: |
+          npm ci
+          rm -rf node_modules.tar.gz || true
 
-      - name: ✅ Build Next.js app
+      - name: ✅ Build
         run: npm run build
 
-      - name: ✅ Deploy to Azure Web App using Publish Profile
+      - name: ✅ Deploy to Azure
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'Proofly'
           slot-name: 'production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B9BED6E7DCB44AC480C030D1F2D27134 }}
           package: .
+
