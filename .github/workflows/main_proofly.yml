@@ -87,11 +87,13 @@ jobs:
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js version
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '22.x'
@@ -101,16 +103,13 @@ jobs:
           npm install
           npm run build
 
-      - name: Upload artifact for deployment job
+      # Upload the entire project (except node_modules) as artifact
+      - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
         with:
           name: nextjs-app
           path: |
-            .next
-            public
-            package.json
-            package-lock.json
-            next.config.js
+            .  # Upload the whole project directory
 
   deploy:
     runs-on: ubuntu-latest
@@ -122,6 +121,7 @@ jobs:
         with:
           name: nextjs-app
 
+      # Deploy to Azure Web App
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
