@@ -103,13 +103,18 @@ jobs:
           npm install
           npm run build
 
-      # Upload the entire project (except node_modules) as artifact
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
         with:
           name: nextjs-app
           path: |
-            .  # Upload the whole project directory
+            .next
+            public
+            next.config.js
+            package.json
+            package-lock.json
+            tsconfig.json
+            src
 
   deploy:
     runs-on: ubuntu-latest
@@ -121,7 +126,6 @@ jobs:
         with:
           name: nextjs-app
 
-      # Deploy to Azure Web App
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
