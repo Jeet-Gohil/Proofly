@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
           {/*local pg script */}
-            <script src="https://proofly-socket-server-1.onrender.com" data-user-id="5e6bcd29-77c8-4dbe-a28b-1c8986fc8694" data-site-id="39b858b9-f2fe-4cfd-b34b-e4b6a2a7e389"></script>     
+            <script src="https://proofly-delta.vercel.app" data-user-id="5e6bcd29-77c8-4dbe-a28b-1c8986fc8694" data-site-id="39b858b9-f2fe-4cfd-b34b-e4b6a2a7e389"></script>     
            {/* <script src="https://proofly-delta.vercel.app/api/Tracker" data-user-id="5e6bcd29-77c8-4dbe-a28b-1c8986fc8694" data-site-id="39b858b9-f2fe-4cfd-b34b-e4b6a2a7e389"></script>     */}
       </head>
       <body>
