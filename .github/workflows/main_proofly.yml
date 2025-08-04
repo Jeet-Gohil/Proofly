@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  IMAGE_NAME: proofly
+  IMAGE_NAME: samples/proofly-app
   ACR_LOGIN_SERVER: prooflyregistry.azurecr.io
 
 jobs:
