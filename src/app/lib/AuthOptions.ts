@@ -82,14 +82,14 @@ export const authOptions: NextAuthOptions = {
       }
     },
     async redirect() {
-      return 'https://proofly-delta.vercel.app/callback'
+      return 'https://proofly-aydbd8f2drd0fegn.southindia-01.azurewebsites.net/callback'
     },
     
   },
   pages : {
     signIn : "/login"
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET!,
  
   debug: true,
 };
